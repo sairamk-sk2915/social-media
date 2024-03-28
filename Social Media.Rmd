@@ -2,7 +2,7 @@
 title: "Social Media"
 author: "Satya Shiva Sai Ram Kamma"
 date: "2024-03-25"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
