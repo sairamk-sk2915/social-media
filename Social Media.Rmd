@@ -1,0 +1,84 @@
+---
+title: "Social Media"
+author: "Satya Shiva Sai Ram Kamma"
+date: "2024-03-25"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+
+library(readxl)
+library(dplyr)
+library(FactoMineR)
+library(factoextra)
+
+social_media <- read_excel("social_media_cleaned.xlsx")
+
+social_media_numeric <- select_if(social_media, is.numeric)
+
+# Perform PCA
+pca_result <- prcomp(social_media_numeric, scale = TRUE)
+
+# Scree plot
+plot(pca_result$sdev^2, type = "b", xlab = "Principal Component", ylab = "Variance Explained")
+
+# Loadings
+loadings <- pca_result$rotation
+print(loadings)
+
+# Data projection onto all PCs
+data_projection_all <- as.data.frame(pca_result$x)
+
+# Matrix scatterplot for pairs of principal components
+pairs(data_projection_all, col = "blue", pch = 19,
+      main = "Data Visualization using All PCs")
+
+# Visualize Eigenvalues
+fviz_eig(pca_result, addlabels = TRUE)
+
+# Visualize Variable Quality
+fviz_pca_var(pca_result, col.var = "cos2",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"), 
+             repel = TRUE)
+
+# Visualize Individual Contributions
+fviz_pca_ind(pca_result,
+             geom.ind = "point", # Show points only
+             palette = c("#00AFBB", "#E7B800", "#FC4E07"),
+             addEllipses = TRUE, # Concentration ellipses
+             legend.title = "Groups"
+             )
+
+# Biplot
+biplot(pca_result)
+
+# Variable correlation plot (Correlation Circle)
+fviz_pca_var(pca_result, col.var = "black")
+
+# Quality of representation of variables on dimensions 1 and 2
+fviz_cos2(pca_result, choice = "var", axes = 1:2)
+
+# Contributions of variables to principal components
+fviz_contrib(pca_result, choice = "var", axes = 1, top = 10)
+fviz_contrib(pca_result, choice = "var", axes = 2, top = 10)
+
+# Visualize individual contributions
+fviz_pca_ind(pca_result,
+             geom.ind = "point", # Show points only
+             palette = c("#00AFBB", "#E7B800", "#FC4E07"),
+             addEllipses = TRUE, # Concentration ellipses
+             legend.title = "Groups"
+             )
+
+# 3D scatterplot of the first three principal components
+library(scatterplot3d)
+scatterplot3d(pca_result$x[,1:3], color = social_media$Instagram)
+
+
+```
+
+
