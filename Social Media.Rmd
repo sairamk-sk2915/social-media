@@ -26,6 +26,11 @@ pca_result <- prcomp(social_media_numeric, scale = TRUE)
 # Scree plot
 plot(pca_result$sdev^2, type = "b", xlab = "Principal Component", ylab = "Variance Explained")
 
+
+#From PCA variate representation of each PC, It’s evident that PC1 and PC2 add arround 50% of the to total variance
+
+plot(pca_result$sdev^2, xlab = "Component number", ylab = "Component variance", type = "l", main = "Scree diagram")
+
 # Loadings
 loadings <- pca_result$rotation
 print(loadings)
@@ -74,7 +79,6 @@ fviz_pca_ind(pca_result,
              legend.title = "Groups"
              )
 
-# 3D scatterplot of the first three principal components
 library(scatterplot3d)
 scatterplot3d(pca_result$x[,1:3], color = social_media$Instagram)
 
@@ -82,3 +86,194 @@ scatterplot3d(pca_result$x[,1:3], color = social_media$Instagram)
 ```
 
 
+### Cluster Analysis
+
+```{r}
+library(readxl)
+library(factoextra)
+library(ggplot2)
+library(factoextra)
+library(ggfortify)
+library(MASS)
+library(ggrepel)
+library(stats)
+
+
+social_media_cluster <- read_excel("social_media_cleaned.xlsx")
+data.scaled <- scale(x = social_media_cluster[, -1], center = TRUE, scale = TRUE)
+data <- data.scaled
+head(data)
+
+
+# Perform PCA
+pc <- prcomp(data.scaled)
+pc_first_three <- pc$x[, 1:3]
+# Perform K-means clustering on the first three principal components
+set.seed(123)  # For reproducibility
+k <- 3  # Number of clusters
+km_clusters <- kmeans(pc_first_three, centers = k)
+
+# Define colors for each cluster
+cluster_colors <- c("red", "blue", "green")
+
+# Plot the first three principal components with cluster assignments
+plot(pc_first_three, col = cluster_colors[km_clusters$cluster], 
+     main = "First Three Principal Components with Cluster Assignments", 
+     xlab = "", ylab = "", pch = 20)
+```
+<p>It is first performs Principal Component Analysis (PCA) on scaled data, reducing its dimensionality.</p>
+<p>Then, it extracts the first three principal components. Next, it applies K-means clustering to these components, dividing data into three clusters. </p>
+<p>Finally, it plots the first three principal components with color-coded cluster assignments for visualization and analysis</p>
+
+```{r}
+# Take a subset of 20 rows
+data_subset <- data[1:20, ]
+
+# Perform PCA
+pca_result <- prcomp(data_subset)
+
+# Extract the first three principal components
+pc_first_three <- pca_result$x[, 1:3]
+
+# Perform hierarchical clustering on the first three principal components
+hc <- hclust(dist(pc_first_three))
+
+# Plot the dendrogram
+plot(hc, main = "Dendrogram of Hierarchical Clustering (Subset of 20 Rows)",
+     xlab = "Sample Index", ylab = "Distance", sub = NULL)
+
+```
+
+<p>The plot shows the first three principal components, performs hierarchical clustering on them, and plots a dendrogram showing the relationships between the samples based on their distances in the reduced-dimensional space.</p>
+
+```{r}
+# Visualize cluster and membership using first two Principal Components
+fviz_cluster(list(data = pc$x[, 1:2], cluster = km_clusters$cluster))
+```
+
+<p>This plot visualizes clustering results by plotting data points in a two-dimensional space using the first two Principal Components. Each point is colored according to its assigned cluster, showing the grouping pattern identified by the clustering algorithm. It helps understand how data points are grouped based on their features.</p>
+
+```{r}
+# Non-hierarchical clustering (k-means)
+num_clusters <- 2  
+kmeans_model <- kmeans(data, centers = num_clusters)
+
+# Membership for each cluster
+table(kmeans_model$cluster)
+
+```
+<p>This represents clustering using the k-means algorithm, dividing data into two clusters. It initializes cluster centers randomly, assigning each data point to the nearest cluster. The table function counts the number of data points assigned to each cluster, providing insight into cluster membership and distribution.</p>
+
+<b><p>This represents clustering using the k-means algorithm, dividing data into two clusters. It initializes cluster centers randomly, assigning each data point to the nearest cluster. The table function counts the number of data points assigned to each cluster, providing insight into cluster membership and distribution.</p></b>
+
+```{r}
+# Visualize cluster and membership using first two Principal Components
+fviz_cluster(list(data = pc$x[, 1:2], cluster = kmeans_model$cluster))
+```
+<p>This plot visualizes clusters and their memberships using the first two principal components. It extracts these components from the data, then assigns each data point to a cluster using k-means clustering. Finally, it creates a visual representation showing how the data points are grouped based on their similarities in the first two principal components.</p>
+
+<b><p>What is the relationship between the clustering results obtained through k-means algorithm and the underlying structure of the data as revealed by Principal Component Analysis (PCA)?</p></b>
+
+```{r}
+# Visualize cluster and membership using first two Principal Components for k-means
+pca_result <- prcomp(data, scale = TRUE)
+fviz_cluster(kmeans_model, data = pca_result$x[, 1:2], geom = "point", 
+             pointsize = 2, fill = "white", main = "K-means Clustering Result (PCA)")
+```
+<p>This shows visualization of the clusters and their memberships using the first two Principal Components (PCs) obtained from the PCA (Principal Component Analysis) of the numerical data. First, it computes the PCA result for the numerical data and scales it. Then, it uses the fviz_cluster function to plot the clusters obtained from the k-means algorithm (kmeans_model). It represents each data point as a point on the plot, with the size set to 2 and colored white. The plot is titled “K-means Clustering Result (PCA)”. This visualization helps to understand how the data points are grouped into clusters based on their similarities, as revealed by the PCA analysis.</p>
+
+<p>What is the relationship between the number of clusters (k) and the average silhouette width in k-means clustering, and how does this relationship inform the determination of the optimal number of clusters for a given dataset?</p>
+
+
+```{r}
+library(factoextra)
+library(cluster)
+
+# Calculate silhouette information for k-means clustering
+sil <- silhouette(kmeans_model$cluster, dist(data))
+
+# Visualize the silhouette plot for k-means clustering
+fviz_silhouette(sil, main = "Silhouette Plot for K-means Clustering")
+```
+
+<p>This plot calculates and visualizes the silhouette information for k-means clustering. Silhouette analysis helps evaluate the quality of clustering by measuring how similar an object is to its own cluster compared to other clusters. A higher silhouette width indicates better separation of clusters, while negative values suggest that points might be assigned to the wrong clusters. This plot helps in determining the optimal number of clusters for k-means clustering and assessing the overall clustering performance.</p>
+
+```{r}
+# Create a data frame with cluster membership
+data_clustered <- data.frame(data, Cluster = kmeans_model$cluster)  # Ensure conversion to data frame
+
+# Scatter plot of data points colored by cluster membership
+plot(data_clustered$Whatsapp.Wechat, data_clustered$youtube, 
+     col = data_clustered$Cluster, pch = 17, 
+     xlab = "Whatsapp", ylab = "Youtube",  
+     main = "Scatter Plot of Clustering")
+legend("topright", legend = unique(data_clustered$Cluster), 
+       col = 1:max(data_clustered$Cluster), pch = 17, title = "Cluster")
+```
+<p>Overall, this plot visualizes clusters in the data, helping us understand how data points group together based on the Whatsapp and Youtube, with each group represented by a different color on the plot.</p>
+
+
+### Factor Analysis
+
+```{r}
+library(ggplot2)
+library(psych)
+fa.parallel(social_media_numeric)
+```
+<p>Parallel analysis suggests that the number of factors = 0 and the number of components = 0</p>
+
+```{r}
+fit.pc <- principal(social_media_numeric, nfactors=2, rotate="varimax")
+fit.pc
+```
+
+<p>
+High absolute values (close to 1) indicate a strong relationship between the variable and the factor. #h2 explains how much variance of the variables are explained by the factors. #u2 indicates the amount of variance not explained by the factors Principal Components Analysis Call: principal(r = social_media_numeric, nfactors = 2, rotate = “varimax”) Standardized loadings (pattern matrix) based upon correlation matrix
+</p>
+
+<p>
+SS loadings 2.27 1.80 Proportion Var 0.25 0.20 Cumulative Var 0.25 0.45 Proportion Explained 0.56 0.44 Cumulative Proportion 0.56 1.00</p>
+
+<p>Mean item complexity = 1.3 Test of the hypothesis that 2 components are sufficient.</p>
+
+<p>The root mean square of the residuals (RMSR) is 0.14 with the empirical chi square 29.01 with prob < 0.066
+
+</p>
+
+```{r}
+round(fit.pc$values, 3)
+fit.pc$loadings
+fit.pc$communality
+# Rotated factor scores, Notice the columns ordering: RC1, RC2
+fit.pc
+fit.pc$scores
+fa.plot(fit.pc)
+
+fa.diagram(fit.pc) # Visualize the relationship
+vss(social_media_numeric)
+```
+
+<p>
+Very Simple Structure Call: vss(x = social_media_numeric) VSS complexity 1 achieves a maximimum of 0.61 with 6 factors VSS complexity 2 achieves a maximimum of 0.78 with 7 factors
+
+The Velicer MAP achieves a minimum of 0.06 with 1 factors BIC achieves a minimum of -53.17 with 1 factors Sample Size adjusted BIC achieves a minimum of 1.47 with 5 factors
+
+Statistics by number of factors
+
+</p>
+
+```{r}
+# Computing Correlation Matrix
+corrm.social <- cor(social_media_numeric)
+corrm.social
+
+plot(corrm.social)
+social_pca <- prcomp(social_media_numeric, scale=TRUE)
+summary(social_pca)
+plot(social_pca)
+
+biplot(fit.pc)
+```
+
+
+<p>Overall, these techniques complement each other and can be used together to gain a comprehensive understanding of the data, uncover hidden patterns and structures, and derive meaningful insights for decision-making and further analysis</p>
