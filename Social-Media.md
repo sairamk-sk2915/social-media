@@ -866,3 +866,96 @@ to gain a comprehensive understanding of the data, uncover hidden
 patterns and structures, and derive meaningful insights for
 decision-making and further analysis
 </p>
+
+#### Multiple Regression Analysis
+
+``` r
+library(dplyr)
+library(readxl)
+library(car)
+```
+
+    ## Warning: package 'car' was built under R version 4.3.2
+
+    ## Loading required package: carData
+
+    ## Warning: package 'carData' was built under R version 4.3.2
+
+    ## 
+    ## Attaching package: 'car'
+
+    ## The following object is masked from 'package:psych':
+    ## 
+    ##     logit
+
+    ## The following object is masked from 'package:dplyr':
+    ## 
+    ##     recode
+
+``` r
+library(ggplot2)
+
+social_media <- read_excel("social_media_cleaned.xlsx")
+
+social_media_numeric <- select_if(social_media, is.numeric)
+
+model <- lm( `How you felt the entire week?` ~ Instagram + LinkedIn + SnapChat + Twitter + `Whatsapp/Wechat` + youtube + OTT + Reddit,
+  data = social_media_numeric
+)
+
+summary(model)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = `How you felt the entire week?` ~ Instagram + LinkedIn + 
+    ##     SnapChat + Twitter + `Whatsapp/Wechat` + youtube + OTT + 
+    ##     Reddit, data = social_media_numeric)
+    ## 
+    ## Residuals:
+    ##      Min       1Q   Median       3Q      Max 
+    ## -1.14225 -0.32574 -0.04625  0.48405  1.49274 
+    ## 
+    ## Coefficients:
+    ##                   Estimate Std. Error t value Pr(>|t|)   
+    ## (Intercept)        2.72840    0.67742   4.028  0.00168 **
+    ## Instagram         -0.03070    0.06417  -0.478  0.64091   
+    ## LinkedIn           0.13054    0.08635   1.512  0.15647   
+    ## SnapChat           0.04185    0.06246   0.670  0.51553   
+    ## Twitter            0.16850    0.27181   0.620  0.54692   
+    ## `Whatsapp/Wechat`  0.05279    0.06756   0.781  0.44969   
+    ## youtube            0.03106    0.13556   0.229  0.82263   
+    ## OTT               -0.07842    0.09259  -0.847  0.41357   
+    ## Reddit            -0.03435    0.12297  -0.279  0.78475   
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 0.8174 on 12 degrees of freedom
+    ## Multiple R-squared:  0.2805, Adjusted R-squared:  -0.1991 
+    ## F-statistic: 0.5849 on 8 and 12 DF,  p-value: 0.7729
+
+``` r
+vif(model)
+```
+
+    ##         Instagram          LinkedIn          SnapChat           Twitter 
+    ##          1.524923          1.367600          1.402359          3.684365 
+    ## `Whatsapp/Wechat`           youtube               OTT            Reddit 
+    ##          2.216573          1.660846          3.199078          1.148110
+
+``` r
+# Plot the residuals vs fitted values
+ggplot(social_media_numeric, aes(x = fitted(model), y = residuals(model))) +
+  geom_point(alpha = 0.5) +
+  labs(title = "Residuals vs Fitted Values", x = "Fitted Values", y = "Residuals")
+```
+
+![](Social-Media_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+
+``` r
+# QQ-plot for normality check
+qqnorm(residuals(model))
+qqline(residuals(model))
+```
+
+![](Social-Media_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->

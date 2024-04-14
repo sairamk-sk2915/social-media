@@ -277,3 +277,33 @@ biplot(fit.pc)
 
 
 <p>Overall, these techniques complement each other and can be used together to gain a comprehensive understanding of the data, uncover hidden patterns and structures, and derive meaningful insights for decision-making and further analysis</p>
+
+
+#### Multiple Regression Analysis
+
+```{r}
+library(dplyr)
+library(readxl)
+library(car)
+library(ggplot2)
+
+social_media <- read_excel("social_media_cleaned.xlsx")
+
+social_media_numeric <- select_if(social_media, is.numeric)
+
+model <- lm( `How you felt the entire week?` ~ Instagram + LinkedIn + SnapChat + Twitter + `Whatsapp/Wechat` + youtube + OTT + Reddit,
+  data = social_media_numeric
+)
+
+summary(model)
+vif(model)
+
+# Plot the residuals vs fitted values
+ggplot(social_media_numeric, aes(x = fitted(model), y = residuals(model))) +
+  geom_point(alpha = 0.5) +
+  labs(title = "Residuals vs Fitted Values", x = "Fitted Values", y = "Residuals")
+
+# QQ-plot for normality check
+qqnorm(residuals(model))
+qqline(residuals(model))
+```
