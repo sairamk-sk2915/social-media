@@ -286,24 +286,89 @@ library(dplyr)
 library(readxl)
 library(car)
 library(ggplot2)
+library(GGally)
 
 social_media <- read_excel("social_media_cleaned.xlsx")
-
 social_media_numeric <- select_if(social_media, is.numeric)
+```
 
-model <- lm( `How you felt the entire week?` ~ Instagram + LinkedIn + SnapChat + Twitter + `Whatsapp/Wechat` + youtube + OTT + Reddit,
+#### Model Development
+```{r}
+model <- lm(social_media_numeric$Trouble_falling_asleep  ~ social_media_numeric$Instagram + social_media_numeric$LinkedIn + social_media_numeric$SnapChat + social_media_numeric$Twitter + social_media_numeric$`Whatsapp/Wechat` + social_media_numeric$youtube + social_media_numeric$OTT + social_media_numeric$Reddit,
   data = social_media_numeric
 )
-
 summary(model)
-vif(model)
+```
+<p> In this step, I loaded the dataset and fitted a multiple regression model using the lm() function. The model predicts the How you felt the entire week? based on several predictor variables like: Instagram, LinkedIn, SnapChat, Twitter, Whatsapp, Youtube, OTT and Reddit acceleration.</p>
 
-# Plot the residuals vs fitted values
+<p>The statistical significance of each coefficient, we look at their corresponding t-values and p-values. If a predictor variable has a low p-value (usually less than 0.05), it suggests that the variable is statistically significant in explaining the variability in trouble with sleep. In simpler terms, it means that the variable likely has a genuine impact on sleep issues.</p>
+
+#### Model Acceptance
+
+```{r}
+coefficients(model)
+confint(model,level=0.95)
+fitted(model)
+```
+
+
+#### Residual Analysis
+```{r}
+residuals(model)
+anova(model)
+plot(model)
+
+avPlots(model)
+
+cutoff <- 17/((nrow(social_media)-length(model$coefficients)-2))
+plot(model, which=4, cook.levels=cutoff)
+influencePlot(model, id.method="identify", main="Influence Plot", sub="Circle size is proportial to Cook's Distance" )
+qqPlot(model, main="QQ Plot")
+```
+```{r}
+ggpairs(data=social_media_numeric, title="Social Media")
+
 ggplot(social_media_numeric, aes(x = fitted(model), y = residuals(model))) +
   geom_point(alpha = 0.5) +
   labs(title = "Residuals vs Fitted Values", x = "Fitted Values", y = "Residuals")
 
-# QQ-plot for normality check
-qqnorm(residuals(model))
-qqline(residuals(model))
+```
+<p>The residual vs. fitted plot is a tool used to evaluate the assumptions and adequacy of a regression model. It helps to identify whether the model adequately captures the underlying relationships in the data or if there are issues that need to be addressed. The plot shows a pattern of points around zero, the model is not appropriate.</p>
+
+#### Prediction
+<p>The predict() function will generate predicted values of the dependent variable (Total_revenue) based on the provided predictors.</p>
+```{r}
+new_data_pd <- data.frame(
+  character = "masinl",
+  Instagram = 3.50,
+  LinkedIn = 4.00,
+  SnapChat = 1.00,
+  Twitter = 5.00,
+  `Whatsapp/Wechat` = 1.00,
+  youtube = 2.50,
+  OTT = 14.50,
+  Reddit = 2.50,
+  Trouble_falling_asleep = 0,
+  Mood = 1,
+  Productivity = 0,
+  Tired_waking_up_in_morning = 3,
+  `How you felt the entire week?` = 3
+)
+
+predicted_pd <- predict(model, newdata = new_data_pd)
+predicted_pd
+summary(predicted_pd)
+```
+
+#### Model Accuracy
+
+```{r}
+rsquared <- summary(model)$r.squared
+cat("R-squared:", rsquared, "\n")
+adjusted_rsquared <- summary(model)$adj.r.squared
+cat("Adjusted R-squared:", adjusted_rsquared, "\n")
+predictions <- predict(model)
+rmse <- sqrt(mean((social_media$Instagram - predictions)^2))
+cat("RMSE:", rmse, "\n")
+
 ```

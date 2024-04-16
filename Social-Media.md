@@ -68,36 +68,45 @@ loadings <- pca_result$rotation
 print(loadings)
 ```
 
-    ##                                       PC1          PC2         PC3        PC4
-    ## Instagram                      0.35997253 -0.235305731 -0.48074695  0.1123396
-    ## LinkedIn                       0.39149535 -0.188256641  0.42154260 -0.2431677
-    ## SnapChat                       0.14434470 -0.001375426 -0.53148137 -0.5851768
-    ## Twitter                       -0.38928919 -0.485292758  0.14824132 -0.2290724
-    ## Whatsapp/Wechat                0.49712209  0.001226222 -0.14994837  0.2121451
-    ## youtube                        0.43321201 -0.232497668  0.25452061  0.3341619
-    ## OTT                            0.02991209 -0.694285079 -0.10777759 -0.1630966
-    ## Reddit                        -0.14824451 -0.346301530  0.09853811  0.2831951
-    ## How you felt the entire week?  0.29511949  0.132915416  0.42207257 -0.5194936
-    ##                                       PC5         PC6        PC7         PC8
-    ## Instagram                      0.13976700 -0.31408369  0.4516641 -0.49586684
-    ## LinkedIn                      -0.11932387 -0.28841101 -0.5352279 -0.41219103
-    ## SnapChat                      -0.34293942 -0.16571370 -0.1349190  0.39502630
-    ## Twitter                        0.31769932  0.03070392  0.1596447  0.04109432
-    ## Whatsapp/Wechat                0.03955265  0.70875864 -0.1526895  0.02249668
-    ## youtube                        0.10599868 -0.36788501  0.1356451  0.64454084
-    ## OTT                            0.13238183  0.29590419 -0.1450540  0.06870679
-    ## Reddit                        -0.84276046  0.07699596  0.1923146 -0.07462750
-    ## How you felt the entire week? -0.08435896  0.24207624  0.6050635 -0.01585044
-    ##                                       PC9
-    ## Instagram                     -0.05696856
-    ## LinkedIn                      -0.14378008
-    ## SnapChat                      -0.18692529
-    ## Twitter                       -0.63987847
-    ## Whatsapp/Wechat               -0.39705749
-    ## youtube                       -0.03767887
-    ## OTT                            0.58992497
-    ## Reddit                        -0.09727197
-    ## How you felt the entire week?  0.12308003
+    ##                                       PC1         PC2         PC3         PC4
+    ## Instagram                      0.41464184  0.02024349 -0.26383045  0.40114808
+    ## LinkedIn                       0.29217292  0.38506533  0.15123613 -0.28513889
+    ## SnapChat                       0.25433387 -0.24590367 -0.29660999  0.15262675
+    ## Twitter                       -0.28013061  0.22218671 -0.50324467 -0.25891260
+    ## Whatsapp/Wechat                0.39300602  0.15602394  0.22649362  0.21201973
+    ## youtube                        0.27449134  0.38974184  0.19573161  0.20908153
+    ## OTT                            0.05887065  0.36765414 -0.50670371  0.06248821
+    ## Reddit                        -0.13017449  0.22001689 -0.21853542 -0.04431012
+    ## Trouble_falling_asleep         0.30661910 -0.32654537 -0.32456213  0.09152823
+    ## Mood Productivity              0.35430862  0.07464005 -0.22037175 -0.41690878
+    ## Tired waking up in morning     0.12383630 -0.51575921 -0.05145166 -0.18392420
+    ## How you felt the entire week?  0.33830839 -0.05873321  0.12498115 -0.59740380
+    ##                                       PC5         PC6         PC7          PC8
+    ## Instagram                     -0.07164143 -0.07277191 -0.27803592 -0.325410941
+    ## LinkedIn                       0.22198557  0.14076272  0.30834581 -0.187758901
+    ## SnapChat                       0.13403459  0.16886311  0.72273506  0.042206980
+    ## Twitter                        0.20163164 -0.24131742 -0.16599189  0.004223787
+    ## Whatsapp/Wechat               -0.40513253 -0.31770624  0.10652086  0.300422648
+    ## youtube                        0.27328621  0.24851748 -0.36090468  0.205235322
+    ## OTT                           -0.01564733 -0.20469695  0.09877191  0.522778157
+    ## Reddit                        -0.52696344  0.75425195 -0.03031190  0.055511686
+    ## Trouble_falling_asleep         0.35469619  0.25794239 -0.26114833 -0.023627825
+    ## Mood Productivity             -0.37584104 -0.19081453 -0.06770024 -0.454584222
+    ## Tired waking up in morning    -0.26563533 -0.01778508 -0.21519479  0.385609332
+    ## How you felt the entire week?  0.18052230  0.10670264 -0.07972117  0.303976225
+    ##                                       PC9        PC10        PC11        PC12
+    ## Instagram                      0.23790068  0.07998839  0.53721890  0.22784323
+    ## LinkedIn                       0.52007809  0.26496357 -0.23696134  0.25675523
+    ## SnapChat                      -0.12571349 -0.40210181  0.06398674  0.10668550
+    ## Twitter                       -0.17040670 -0.17399436 -0.08766026  0.59867488
+    ## Whatsapp/Wechat               -0.36650911  0.19398830 -0.23609485  0.36135831
+    ## youtube                       -0.02148073 -0.59467974 -0.15686464 -0.05655012
+    ## OTT                            0.22016248  0.17263960  0.04725589 -0.44159213
+    ## Reddit                        -0.08611490  0.08806585  0.03611781  0.13365388
+    ## Trouble_falling_asleep        -0.23614873  0.40672261 -0.44538755 -0.07053290
+    ## Mood Productivity             -0.11989066 -0.28008933 -0.22008935 -0.34111244
+    ## Tired waking up in morning     0.54060554 -0.22156677 -0.17530413  0.21029053
+    ## How you felt the entire week? -0.27387540  0.09816128  0.53107506  0.01309173
 
 ``` r
 # Data projection onto all PCs
@@ -237,13 +246,20 @@ head(data)
     ## [4,] -0.1534369  0.6838181 -0.1944552 -0.44951033      -0.2804351 -0.5597267
     ## [5,]  1.7277449 -1.2283589 -0.5696232  0.06702685      -0.8514729  0.3035697
     ## [6,] -1.0205812  1.3638528 -0.4349475 -0.44951033       1.3830228  2.3179281
-    ##             OTT     Reddit How you felt the entire week?
-    ## [1,]  3.4382238  1.2405563                    -0.5741693
-    ## [2,] -0.6686547 -0.3292004                    -0.5741693
-    ## [3,] -0.1021887 -0.3292004                     0.7655590
-    ## [4,] -0.1021887 -0.3292004                     0.7655590
-    ## [5,] -0.1021887  0.2987023                    -0.5741693
-    ## [6,]  0.1810443 -0.3292004                     2.1052873
+    ##             OTT     Reddit Trouble_falling_asleep Mood Productivity
+    ## [1,]  3.4382238  1.2405563             -0.6900656         0.2182179
+    ## [2,] -0.6686547 -0.3292004              1.3801311         0.2182179
+    ## [3,] -0.1021887 -0.3292004             -0.6900656         0.2182179
+    ## [4,] -0.1021887 -0.3292004             -0.6900656         0.2182179
+    ## [5,] -0.1021887  0.2987023              1.3801311         0.2182179
+    ## [6,]  0.1810443 -0.3292004             -0.6900656         0.2182179
+    ##      Tired waking up in morning How you felt the entire week?
+    ## [1,]                 -0.6900656                    -0.5741693
+    ## [2,]                 -0.6900656                    -0.5741693
+    ## [3,]                 -0.6900656                     0.7655590
+    ## [4,]                 -0.6900656                     0.7655590
+    ## [5,]                  1.3801311                    -0.5741693
+    ## [6,]                 -0.6900656                     2.1052873
 
 ``` r
 # Perform PCA
@@ -331,7 +347,7 @@ table(kmeans_model$cluster)
 
     ## 
     ##  1  2 
-    ## 11 10
+    ## 17  4
 
 <p>
 This represents clustering using the k-means algorithm, dividing data
@@ -413,8 +429,8 @@ fviz_silhouette(sil, main = "Silhouette Plot for K-means Clustering")
 ```
 
     ##   cluster size ave.sil.width
-    ## 1       1   11          0.26
-    ## 2       2   10          0.04
+    ## 1       1   17          0.26
+    ## 2       2    4         -0.06
 
 ![](Social-Media_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
@@ -476,19 +492,11 @@ fa.parallel(social_media_numeric)
     ## Warning in fac(r = r, nfactors = nfactors, n.obs = n.obs, rotate = rotate, : An
     ## ultra-Heywood case was detected.  Examine the results carefully
 
-    ## Warning in fa.stats(r = r, f = f, phi = phi, n.obs = n.obs, np.obs = np.obs, :
-    ## The estimated weights for the factor scores are probably incorrect.  Try a
-    ## different factor score estimation method.
+    ## Warning in cor(sampledata, use = use): the standard deviation is zero
 
-    ## Warning in fac(r = r, nfactors = nfactors, n.obs = n.obs, rotate = rotate, : An
-    ## ultra-Heywood case was detected.  Examine the results carefully
+    ## Warning in cor(sampledata, use = use): the standard deviation is zero
 
-    ## Warning in fa.stats(r = r, f = f, phi = phi, n.obs = n.obs, np.obs = np.obs, :
-    ## The estimated weights for the factor scores are probably incorrect.  Try a
-    ## different factor score estimation method.
-
-    ## Warning in fac(r = r, nfactors = nfactors, n.obs = n.obs, rotate = rotate, : An
-    ## ultra-Heywood case was detected.  Examine the results carefully
+    ## Warning in cor(sampledata, use = use): the standard deviation is zero
 
     ## Warning in fa.stats(r = r, f = f, phi = phi, n.obs = n.obs, np.obs = np.obs, :
     ## The estimated weights for the factor scores are probably incorrect.  Try a
@@ -504,20 +512,9 @@ fa.parallel(social_media_numeric)
     ## Warning in fac(r = r, nfactors = nfactors, n.obs = n.obs, rotate = rotate, : An
     ## ultra-Heywood case was detected.  Examine the results carefully
 
-    ## Warning in fa.stats(r = r, f = f, phi = phi, n.obs = n.obs, np.obs = np.obs, :
-    ## The estimated weights for the factor scores are probably incorrect.  Try a
-    ## different factor score estimation method.
+    ## Warning in cor(sampledata, use = use): the standard deviation is zero
 
-    ## Warning in fac(r = r, nfactors = nfactors, n.obs = n.obs, rotate = rotate, : An
-    ## ultra-Heywood case was detected.  Examine the results carefully
-
-    ## Warning in fa.stats(r = r, f = f, phi = phi, n.obs = n.obs, np.obs = np.obs, :
-    ## The estimated weights for the factor scores are probably incorrect.  Try a
-    ## different factor score estimation method.
-
-    ## Warning in fa.stats(r = r, f = f, phi = phi, n.obs = n.obs, np.obs = np.obs, :
-    ## The estimated weights for the factor scores are probably incorrect.  Try a
-    ## different factor score estimation method.
+    ## Warning in cor(sampledata, use = use): the standard deviation is zero
 
     ## Warning in fa.stats(r = r, f = f, phi = phi, n.obs = n.obs, np.obs = np.obs, :
     ## The estimated weights for the factor scores are probably incorrect.  Try a
@@ -526,26 +523,13 @@ fa.parallel(social_media_numeric)
     ## Warning in fac(r = r, nfactors = nfactors, n.obs = n.obs, rotate = rotate, : An
     ## ultra-Heywood case was detected.  Examine the results carefully
 
-    ## Warning in fa.stats(r = r, f = f, phi = phi, n.obs = n.obs, np.obs = np.obs, :
-    ## The estimated weights for the factor scores are probably incorrect.  Try a
-    ## different factor score estimation method.
+    ## Warning in cor(sampledata, use = use): the standard deviation is zero
 
-    ## Warning in fac(r = r, nfactors = nfactors, n.obs = n.obs, rotate = rotate, : An
-    ## ultra-Heywood case was detected.  Examine the results carefully
+    ## Warning in cor(sampledata, use = use): the standard deviation is zero
 
-    ## Warning in fa.stats(r = r, f = f, phi = phi, n.obs = n.obs, np.obs = np.obs, :
-    ## The estimated weights for the factor scores are probably incorrect.  Try a
-    ## different factor score estimation method.
+    ## Warning in cor(sampledata, use = use): the standard deviation is zero
 
-    ## Warning in fac(r = r, nfactors = nfactors, n.obs = n.obs, rotate = rotate, : An
-    ## ultra-Heywood case was detected.  Examine the results carefully
-
-    ## Warning in fa.stats(r = r, f = f, phi = phi, n.obs = n.obs, np.obs = np.obs, :
-    ## The estimated weights for the factor scores are probably incorrect.  Try a
-    ## different factor score estimation method.
-
-    ## Warning in fac(r = r, nfactors = nfactors, n.obs = n.obs, rotate = rotate, : An
-    ## ultra-Heywood case was detected.  Examine the results carefully
+    ## Warning in cor(sampledata, use = use): the standard deviation is zero
 
 ![](Social-Media_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
@@ -564,31 +548,34 @@ fit.pc
     ## Principal Components Analysis
     ## Call: principal(r = social_media_numeric, nfactors = 2, rotate = "varimax")
     ## Standardized loadings (pattern matrix) based upon correlation matrix
-    ##                                 RC1   RC2    h2   u2 com
-    ## Instagram                      0.63  0.09 0.400 0.60 1.0
-    ## LinkedIn                       0.65  0.01 0.421 0.58 1.0
-    ## SnapChat                       0.21 -0.08 0.049 0.95 1.3
-    ## Twitter                       -0.32  0.81 0.761 0.24 1.3
-    ## Whatsapp/Wechat                0.71 -0.28 0.581 0.42 1.3
-    ## youtube                        0.73  0.04 0.534 0.47 1.0
-    ## OTT                            0.37  0.83 0.832 0.17 1.4
-    ## Reddit                        -0.05  0.51 0.258 0.74 1.0
-    ## How you felt the entire week?  0.36 -0.33 0.235 0.77 2.0
+    ##                                 RC1   RC2   h2   u2 com
+    ## Instagram                      0.56  0.39 0.46 0.54 1.8
+    ## LinkedIn                       0.73 -0.16 0.55 0.45 1.1
+    ## SnapChat                       0.11  0.54 0.31 0.69 1.1
+    ## Twitter                       -0.16 -0.54 0.32 0.68 1.2
+    ## Whatsapp/Wechat                0.65  0.21 0.47 0.53 1.2
+    ## youtube                        0.71 -0.18 0.53 0.47 1.1
+    ## OTT                            0.41 -0.37 0.30 0.70 2.0
+    ## Reddit                         0.03 -0.39 0.15 0.85 1.0
+    ## Trouble_falling_asleep         0.10  0.69 0.48 0.52 1.0
+    ## Mood Productivity              0.53  0.27 0.35 0.65 1.5
+    ## Tired waking up in morning    -0.30  0.73 0.62 0.38 1.3
+    ## How you felt the entire week?  0.39  0.41 0.31 0.69 2.0
     ## 
     ##                        RC1  RC2
-    ## SS loadings           2.27 1.80
-    ## Proportion Var        0.25 0.20
-    ## Cumulative Var        0.25 0.45
-    ## Proportion Explained  0.56 0.44
-    ## Cumulative Proportion 0.56 1.00
+    ## SS loadings           2.49 2.37
+    ## Proportion Var        0.21 0.20
+    ## Cumulative Var        0.21 0.40
+    ## Proportion Explained  0.51 0.49
+    ## Cumulative Proportion 0.51 1.00
     ## 
-    ## Mean item complexity =  1.3
+    ## Mean item complexity =  1.4
     ## Test of the hypothesis that 2 components are sufficient.
     ## 
-    ## The root mean square of the residuals (RMSR) is  0.14 
-    ##  with the empirical chi square  29.01  with prob <  0.066 
+    ## The root mean square of the residuals (RMSR) is  0.16 
+    ##  with the empirical chi square  72.39  with prob <  0.0033 
     ## 
-    ## Fit based upon off diagonal values = 0.66
+    ## Fit based upon off diagonal values = 0.56
 
 <p>
 High absolute values (close to 1) indicate a strong relationship between
@@ -618,7 +605,7 @@ chi square 29.01 with prob \< 0.066
 round(fit.pc$values, 3)
 ```
 
-    ## [1] 2.349 1.721 1.370 1.093 0.867 0.611 0.497 0.369 0.122
+    ##  [1] 2.676 2.183 1.764 1.378 0.971 0.851 0.805 0.587 0.401 0.229 0.120 0.035
 
 ``` r
 fit.pc$loadings
@@ -627,35 +614,40 @@ fit.pc$loadings
     ## 
     ## Loadings:
     ##                               RC1    RC2   
-    ## Instagram                      0.626       
-    ## LinkedIn                       0.649       
-    ## SnapChat                       0.207       
-    ## Twitter                       -0.324  0.810
-    ## Whatsapp/Wechat                0.709 -0.278
-    ## youtube                        0.729       
-    ## OTT                            0.374  0.832
-    ## Reddit                                0.506
-    ## How you felt the entire week?  0.358 -0.327
+    ## Instagram                      0.556  0.389
+    ## LinkedIn                       0.725 -0.161
+    ## SnapChat                       0.109  0.541
+    ## Twitter                       -0.164 -0.539
+    ## Whatsapp/Wechat                0.650  0.208
+    ## youtube                        0.707 -0.184
+    ## OTT                            0.407 -0.373
+    ## Reddit                               -0.388
+    ## Trouble_falling_asleep         0.104  0.688
+    ## Mood Productivity              0.527  0.265
+    ## Tired waking up in morning    -0.303  0.728
+    ## How you felt the entire week?  0.386  0.406
     ## 
     ##                  RC1   RC2
-    ## SS loadings    2.266 1.804
-    ## Proportion Var 0.252 0.200
-    ## Cumulative Var 0.252 0.452
+    ## SS loadings    2.494 2.366
+    ## Proportion Var 0.208 0.197
+    ## Cumulative Var 0.208 0.405
 
 ``` r
 fit.pc$communality
 ```
 
     ##                     Instagram                      LinkedIn 
-    ##                    0.39967455                    0.42102084 
+    ##                     0.4609883                     0.5521648 
     ##                      SnapChat                       Twitter 
-    ##                    0.04894532                    0.76130198 
+    ##                     0.3051221                     0.3177808 
     ##               Whatsapp/Wechat                       youtube 
-    ##                    0.58050860                    0.53387209 
+    ##                     0.4664790                     0.5332625 
     ##                           OTT                        Reddit 
-    ##                    0.83170119                    0.25801853 
-    ## How you felt the entire week? 
-    ##                    0.23499111
+    ##                     0.3043824                     0.1510324 
+    ##        Trouble_falling_asleep             Mood Productivity 
+    ##                     0.4843960                     0.3481044 
+    ##    Tired waking up in morning How you felt the entire week? 
+    ##                     0.6217976                     0.3138161
 
 ``` r
 # Rotated factor scores, Notice the columns ordering: RC1, RC2
@@ -665,58 +657,61 @@ fit.pc
     ## Principal Components Analysis
     ## Call: principal(r = social_media_numeric, nfactors = 2, rotate = "varimax")
     ## Standardized loadings (pattern matrix) based upon correlation matrix
-    ##                                 RC1   RC2    h2   u2 com
-    ## Instagram                      0.63  0.09 0.400 0.60 1.0
-    ## LinkedIn                       0.65  0.01 0.421 0.58 1.0
-    ## SnapChat                       0.21 -0.08 0.049 0.95 1.3
-    ## Twitter                       -0.32  0.81 0.761 0.24 1.3
-    ## Whatsapp/Wechat                0.71 -0.28 0.581 0.42 1.3
-    ## youtube                        0.73  0.04 0.534 0.47 1.0
-    ## OTT                            0.37  0.83 0.832 0.17 1.4
-    ## Reddit                        -0.05  0.51 0.258 0.74 1.0
-    ## How you felt the entire week?  0.36 -0.33 0.235 0.77 2.0
+    ##                                 RC1   RC2   h2   u2 com
+    ## Instagram                      0.56  0.39 0.46 0.54 1.8
+    ## LinkedIn                       0.73 -0.16 0.55 0.45 1.1
+    ## SnapChat                       0.11  0.54 0.31 0.69 1.1
+    ## Twitter                       -0.16 -0.54 0.32 0.68 1.2
+    ## Whatsapp/Wechat                0.65  0.21 0.47 0.53 1.2
+    ## youtube                        0.71 -0.18 0.53 0.47 1.1
+    ## OTT                            0.41 -0.37 0.30 0.70 2.0
+    ## Reddit                         0.03 -0.39 0.15 0.85 1.0
+    ## Trouble_falling_asleep         0.10  0.69 0.48 0.52 1.0
+    ## Mood Productivity              0.53  0.27 0.35 0.65 1.5
+    ## Tired waking up in morning    -0.30  0.73 0.62 0.38 1.3
+    ## How you felt the entire week?  0.39  0.41 0.31 0.69 2.0
     ## 
     ##                        RC1  RC2
-    ## SS loadings           2.27 1.80
-    ## Proportion Var        0.25 0.20
-    ## Cumulative Var        0.25 0.45
-    ## Proportion Explained  0.56 0.44
-    ## Cumulative Proportion 0.56 1.00
+    ## SS loadings           2.49 2.37
+    ## Proportion Var        0.21 0.20
+    ## Cumulative Var        0.21 0.40
+    ## Proportion Explained  0.51 0.49
+    ## Cumulative Proportion 0.51 1.00
     ## 
-    ## Mean item complexity =  1.3
+    ## Mean item complexity =  1.4
     ## Test of the hypothesis that 2 components are sufficient.
     ## 
-    ## The root mean square of the residuals (RMSR) is  0.14 
-    ##  with the empirical chi square  29.01  with prob <  0.066 
+    ## The root mean square of the residuals (RMSR) is  0.16 
+    ##  with the empirical chi square  72.39  with prob <  0.0033 
     ## 
-    ## Fit based upon off diagonal values = 0.66
+    ## Fit based upon off diagonal values = 0.56
 
 ``` r
 fit.pc$scores
 ```
 
-    ##                RC1         RC2
-    ##  [1,] -0.372676698  3.71255215
-    ##  [2,]  0.268347117 -0.35575841
-    ##  [3,]  0.359865328 -0.58570042
-    ##  [4,]  0.001187453 -0.44418221
-    ##  [5,] -0.181847349  0.38801798
-    ##  [6,]  1.626846855 -0.58008812
-    ##  [7,] -0.065741826 -0.71382608
-    ##  [8,]  0.432476700 -0.44564386
-    ##  [9,]  1.187916225  0.08916243
-    ## [10,] -1.711078905 -0.31265266
-    ## [11,] -1.280365844  0.12706476
-    ## [12,] -0.992156374  0.64778326
-    ## [13,] -0.565682913 -0.85688685
-    ## [14,] -0.604748082  0.02945858
-    ## [15,] -0.105177713  0.96127376
-    ## [16,]  0.748723180 -0.55650547
-    ## [17,]  0.456870010 -0.31905559
-    ## [18,] -0.534366898 -0.28003587
-    ## [19,]  0.381851729 -0.49687951
-    ## [20,]  2.408453160  0.83778421
-    ## [21,] -1.458695155 -0.84588208
+    ##               RC1        RC2
+    ##  [1,]  0.03152026 -2.3010655
+    ##  [2,]  0.36294009  0.3883794
+    ##  [3,]  0.53677836 -0.3028726
+    ##  [4,]  0.17219105 -0.1995664
+    ##  [5,] -0.38726442  0.8816096
+    ##  [6,]  1.69693355 -0.4887786
+    ##  [7,] -0.20079571  0.4843012
+    ##  [8,]  0.18221986  1.3207815
+    ##  [9,]  1.20640012 -0.4572010
+    ## [10,] -2.30030270 -1.1572244
+    ## [11,] -0.86395523  0.1114352
+    ## [12,] -0.62706223 -0.9675326
+    ## [13,] -0.89610952  2.2463127
+    ## [14,] -0.38157128 -0.4965518
+    ## [15,]  0.13564058 -1.1499638
+    ## [16,]  0.57178788  1.1075723
+    ## [17,]  0.43480529 -0.1367564
+    ## [18,] -0.72969671  0.5643957
+    ## [19,]  0.48277403 -0.4673222
+    ## [20,]  2.03958577  0.5916007
+    ## [21,] -1.46681906  0.4284470
 
 ``` r
 fa.plot(fit.pc)
@@ -734,6 +729,35 @@ fa.diagram(fit.pc) # Visualize the relationship
 vss(social_media_numeric)
 ```
 
+    ## Warning in fa.stats(r = r, f = f, phi = phi, n.obs = n.obs, np.obs = np.obs, :
+    ## The estimated weights for the factor scores are probably incorrect.  Try a
+    ## different factor score estimation method.
+
+    ## Warning in fa.stats(r = r, f = f, phi = phi, n.obs = n.obs, np.obs = np.obs, :
+    ## The estimated weights for the factor scores are probably incorrect.  Try a
+    ## different factor score estimation method.
+
+    ## Warning in fac(r = r, nfactors = nfactors, n.obs = n.obs, rotate = rotate, : An
+    ## ultra-Heywood case was detected.  Examine the results carefully
+
+    ## Warning in fa.stats(r = r, f = f, phi = phi, n.obs = n.obs, np.obs = np.obs, :
+    ## The estimated weights for the factor scores are probably incorrect.  Try a
+    ## different factor score estimation method.
+
+    ## Warning in fac(r = r, nfactors = nfactors, n.obs = n.obs, rotate = rotate, : An
+    ## ultra-Heywood case was detected.  Examine the results carefully
+
+    ## Warning in fa.stats(r = r, f = f, phi = phi, n.obs = n.obs, np.obs = np.obs, :
+    ## The estimated weights for the factor scores are probably incorrect.  Try a
+    ## different factor score estimation method.
+
+    ## Warning in fac(r = r, nfactors = nfactors, n.obs = n.obs, rotate = rotate, : An
+    ## ultra-Heywood case was detected.  Examine the results carefully
+
+    ## Warning in fa.stats(r = r, f = f, phi = phi, n.obs = n.obs, np.obs = np.obs, :
+    ## The estimated weights for the factor scores are probably incorrect.  Try a
+    ## different factor score estimation method.
+
     ## Warning in fac(r = r, nfactors = nfactors, n.obs = n.obs, rotate = rotate, : An
     ## ultra-Heywood case was detected.  Examine the results carefully
 
@@ -749,32 +773,32 @@ vss(social_media_numeric)
     ## 
     ## Very Simple Structure
     ## Call: vss(x = social_media_numeric)
-    ## VSS complexity 1 achieves a maximimum of 0.61  with  6  factors
-    ## VSS complexity 2 achieves a maximimum of 0.78  with  7  factors
+    ## Although the VSS complexity 1 shows  8  factors, it is probably more reasonable to think about  5  factors
+    ## VSS complexity 2 achieves a maximimum of 0.78  with  6  factors
     ## 
-    ## The Velicer MAP achieves a minimum of 0.06  with  1  factors 
-    ## BIC achieves a minimum of  -53.17  with  1  factors
-    ## Sample Size adjusted BIC achieves a minimum of  1.47  with  5  factors
+    ## The Velicer MAP achieves a minimum of 0.07  with  1  factors 
+    ## BIC achieves a minimum of  -88.66  with  1  factors
+    ## Sample Size adjusted BIC achieves a minimum of  7.84  with  7  factors
     ## 
     ## Statistics by number of factors 
-    ##   vss1 vss2   map dof   chisq prob sqresid  fit RMSEA   BIC SABIC complex
-    ## 1 0.38 0.00 0.062  27 2.9e+01 0.36     8.1 0.38 0.035 -53.2  30.2     1.0
-    ## 2 0.49 0.60 0.080  19 1.4e+01 0.81     5.3 0.60 0.000 -44.2  14.4     1.2
-    ## 3 0.55 0.69 0.101  12 7.9e+00 0.79     3.6 0.72 0.000 -28.6   8.4     1.3
-    ## 4 0.57 0.75 0.133   6 5.0e+00 0.55     2.5 0.81 0.000 -13.3   5.2     1.6
-    ## 5 0.59 0.77 0.199   1 1.4e+00 0.23     1.9 0.86 0.134  -1.6   1.5     1.6
-    ## 6 0.61 0.76 0.282  -3 4.5e-08   NA     1.5 0.88    NA    NA    NA     1.7
-    ## 7 0.61 0.78 0.439  -6 2.5e-10   NA     1.3 0.90    NA    NA    NA     1.6
-    ## 8 0.61 0.78 1.000  -8 0.0e+00   NA     1.3 0.90    NA    NA    NA     1.6
-    ##    eChisq    SRMR eCRMS  eBIC
-    ## 1 3.9e+01 1.6e-01 0.186 -43.2
-    ## 2 1.6e+01 1.0e-01 0.140 -42.2
-    ## 3 6.1e+00 6.3e-02 0.110 -30.5
-    ## 4 1.9e+00 3.6e-02 0.087 -16.3
-    ## 5 5.7e-01 1.9e-02 0.116  -2.5
-    ## 6 1.2e-08 2.9e-06    NA    NA
-    ## 7 3.0e-11 1.4e-07    NA    NA
-    ## 8 3.2e-16 4.6e-10    NA    NA
+    ##   vss1 vss2   map dof chisq  prob sqresid  fit RMSEA   BIC SABIC complex eChisq
+    ## 1 0.33 0.00 0.067  54  75.7 0.027   13.27 0.33 0.130 -88.7  78.0     1.0  97.32
+    ## 2 0.41 0.56 0.075  43  60.4 0.041    8.80 0.56 0.130 -70.5  62.2     1.4  55.37
+    ## 3 0.50 0.66 0.086  33  43.8 0.098    5.77 0.71 0.115 -56.6  45.2     1.6  27.84
+    ## 4 0.53 0.72 0.100  24  28.8 0.227    3.85 0.81 0.085 -44.2  29.8     1.6  11.34
+    ## 5 0.55 0.74 0.125  16  20.4 0.201    2.85 0.86 0.104 -28.3  21.1     1.8   5.58
+    ## 6 0.55 0.78 0.175   9  15.6 0.075    2.02 0.90 0.181 -11.8  16.0     1.7   3.32
+    ## 7 0.54 0.72 0.209   3   7.7 0.052    1.74 0.91 0.269  -1.4   7.8     2.0   1.21
+    ## 8 0.59 0.76 0.284  -2   4.9    NA    0.87 0.96    NA    NA    NA     1.9   0.41
+    ##    SRMR eCRMS  eBIC
+    ## 1 0.187 0.207 -67.1
+    ## 2 0.141 0.175 -75.5
+    ## 3 0.100 0.142 -72.6
+    ## 4 0.064 0.106 -61.7
+    ## 5 0.045 0.091 -43.1
+    ## 6 0.035 0.094 -24.1
+    ## 7 0.021 0.098  -7.9
+    ## 8 0.012    NA    NA
 
 <p>
 
@@ -796,36 +820,71 @@ corrm.social <- cor(social_media_numeric)
 corrm.social
 ```
 
-    ##                                 Instagram     LinkedIn    SnapChat    Twitter
-    ## Instagram                      1.00000000  0.097056399  0.28968877 -0.1930565
-    ## LinkedIn                       0.09705640  1.000000000  0.02552545 -0.1300685
-    ## SnapChat                       0.28968877  0.025525452  1.00000000 -0.1799569
-    ## Twitter                       -0.19305653 -0.130068464 -0.17995686  1.0000000
-    ## Whatsapp/Wechat                0.37769615  0.228835623  0.08099980 -0.4958329
-    ## youtube                        0.33000187  0.452197669 -0.16006877 -0.1881777
-    ## OTT                            0.26738122  0.185492527  0.13158590  0.5570740
-    ## Reddit                        -0.07461553 -0.006992884 -0.08116237  0.1649030
-    ## How you felt the entire week? -0.06488863  0.415506031  0.07962803 -0.1455712
-    ##                               Whatsapp/Wechat     youtube        OTT
-    ## Instagram                           0.3776962  0.33000187  0.2673812
-    ## LinkedIn                            0.2288356  0.45219767  0.1854925
-    ## SnapChat                            0.0809998 -0.16006877  0.1315859
-    ## Twitter                            -0.4958329 -0.18817769  0.5570740
-    ## Whatsapp/Wechat                     1.0000000  0.37168516  0.1336204
-    ## youtube                             0.3716852  1.00000000  0.1605652
-    ## OTT                                 0.1336204  0.16056523  1.0000000
-    ## Reddit                             -0.1344497  0.02639991  0.2327911
-    ## How you felt the entire week?       0.1877267  0.17877463 -0.1088494
-    ##                                     Reddit How you felt the entire week?
-    ## Instagram                     -0.074615529                   -0.06488863
-    ## LinkedIn                      -0.006992884                    0.41550603
-    ## SnapChat                      -0.081162369                    0.07962803
-    ## Twitter                        0.164902964                   -0.14557124
-    ## Whatsapp/Wechat               -0.134449660                    0.18772672
-    ## youtube                        0.026399913                    0.17877463
-    ## OTT                            0.232791099                   -0.10884945
-    ## Reddit                         1.000000000                   -0.15598604
-    ## How you felt the entire week? -0.155986035                    1.00000000
+    ##                                 Instagram     LinkedIn    SnapChat     Twitter
+    ## Instagram                      1.00000000  0.097056399  0.28968877 -0.19305653
+    ## LinkedIn                       0.09705640  1.000000000  0.02552545 -0.13006846
+    ## SnapChat                       0.28968877  0.025525452  1.00000000 -0.17995686
+    ## Twitter                       -0.19305653 -0.130068464 -0.17995686  1.00000000
+    ## Whatsapp/Wechat                0.37769615  0.228835623  0.08099980 -0.49583293
+    ## youtube                        0.33000187  0.452197669 -0.16006877 -0.18817769
+    ## OTT                            0.26738122  0.185492527  0.13158590  0.55707401
+    ## Reddit                        -0.07461553 -0.006992884 -0.08116237  0.16490296
+    ## Trouble_falling_asleep         0.50535856 -0.124658176  0.47446668 -0.07841779
+    ## Mood Productivity              0.37498880  0.335447863  0.13051708  0.10299576
+    ## Tired waking up in morning     0.06883078 -0.327465831  0.18918923 -0.27223450
+    ## How you felt the entire week? -0.06488863  0.415506031  0.07962803 -0.14557124
+    ##                               Whatsapp/Wechat      youtube           OTT
+    ## Instagram                          0.37769615  0.330001869  0.2673812155
+    ## LinkedIn                           0.22883562  0.452197669  0.1854925268
+    ## SnapChat                           0.08099980 -0.160068767  0.1315859038
+    ## Twitter                           -0.49583293 -0.188177691  0.5570740080
+    ## Whatsapp/Wechat                    1.00000000  0.371685163  0.1336203696
+    ## youtube                            0.37168516  1.000000000  0.1605652338
+    ## OTT                                0.13362037  0.160565234  1.0000000000
+    ## Reddit                            -0.13444966  0.026399913  0.2327910994
+    ## Trouble_falling_asleep            -0.06304856  0.038656332 -0.0004560485
+    ## Mood Productivity                  0.30887192 -0.003621212  0.1532080319
+    ## Tired waking up in morning        -0.04248925 -0.355519106 -0.2213138016
+    ## How you felt the entire week?      0.18772672  0.178774630 -0.1088494499
+    ##                                     Reddit Trouble_falling_asleep
+    ## Instagram                     -0.074615529           0.5053585585
+    ## LinkedIn                      -0.006992884          -0.1246581760
+    ## SnapChat                      -0.081162369           0.4744666806
+    ## Twitter                        0.164902964          -0.0784177942
+    ## Whatsapp/Wechat               -0.134449660          -0.0630485641
+    ## youtube                        0.026399913           0.0386563318
+    ## OTT                            0.232791099          -0.0004560485
+    ## Reddit                         1.000000000          -0.1403872651
+    ## Trouble_falling_asleep        -0.140387265           1.0000000000
+    ## Mood Productivity              0.075429291           0.1581138830
+    ## Tired waking up in morning    -0.140387265           0.3571428571
+    ## How you felt the entire week? -0.155986035           0.2773500981
+    ##                               Mood Productivity Tired waking up in morning
+    ## Instagram                           0.374988801                 0.06883078
+    ## LinkedIn                            0.335447863                -0.32746583
+    ## SnapChat                            0.130517080                 0.18918923
+    ## Twitter                             0.102995756                -0.27223450
+    ## Whatsapp/Wechat                     0.308871917                -0.04248925
+    ## youtube                            -0.003621212                -0.35551911
+    ## OTT                                 0.153208032                -0.22131380
+    ## Reddit                              0.075429291                -0.14038727
+    ## Trouble_falling_asleep              0.158113883                 0.35714286
+    ## Mood Productivity                   1.000000000                 0.15811388
+    ## Tired waking up in morning          0.158113883                 1.00000000
+    ## How you felt the entire week?       0.438529010                 0.27735010
+    ##                               How you felt the entire week?
+    ## Instagram                                       -0.06488863
+    ## LinkedIn                                         0.41550603
+    ## SnapChat                                         0.07962803
+    ## Twitter                                         -0.14557124
+    ## Whatsapp/Wechat                                  0.18772672
+    ## youtube                                          0.17877463
+    ## OTT                                             -0.10884945
+    ## Reddit                                          -0.15598604
+    ## Trouble_falling_asleep                           0.27735010
+    ## Mood Productivity                                0.43852901
+    ## Tired waking up in morning                       0.27735010
+    ## How you felt the entire week?                    1.00000000
 
 ``` r
 plot(corrm.social)
@@ -839,14 +898,14 @@ summary(social_pca)
 ```
 
     ## Importance of components:
-    ##                          PC1    PC2    PC3    PC4     PC5     PC6     PC7
-    ## Standard deviation     1.533 1.3119 1.1705 1.0456 0.93113 0.78196 0.70503
-    ## Proportion of Variance 0.261 0.1912 0.1522 0.1215 0.09633 0.06794 0.05523
-    ## Cumulative Proportion  0.261 0.4522 0.6045 0.7259 0.82225 0.89019 0.94542
-    ##                            PC8     PC9
-    ## Standard deviation     0.60784 0.34892
-    ## Proportion of Variance 0.04105 0.01353
-    ## Cumulative Proportion  0.98647 1.00000
+    ##                          PC1    PC2    PC3    PC4     PC5     PC6    PC7
+    ## Standard deviation     1.636 1.4776 1.3280 1.1739 0.98548 0.92264 0.8974
+    ## Proportion of Variance 0.223 0.1819 0.1470 0.1148 0.08093 0.07094 0.0671
+    ## Cumulative Proportion  0.223 0.4049 0.5519 0.6667 0.74767 0.81861 0.8857
+    ##                            PC8     PC9    PC10    PC11   PC12
+    ## Standard deviation     0.76608 0.63298 0.47850 0.34662 0.1866
+    ## Proportion of Variance 0.04891 0.03339 0.01908 0.01001 0.0029
+    ## Cumulative Proportion  0.93462 0.96801 0.98709 0.99710 1.0000
 
 ``` r
 plot(social_pca)
@@ -894,68 +953,308 @@ library(car)
 
 ``` r
 library(ggplot2)
+library(GGally)
+```
 
+    ## Warning: package 'GGally' was built under R version 4.3.2
+
+    ## Registered S3 method overwritten by 'GGally':
+    ##   method from   
+    ##   +.gg   ggplot2
+
+``` r
 social_media <- read_excel("social_media_cleaned.xlsx")
-
 social_media_numeric <- select_if(social_media, is.numeric)
+```
 
-model <- lm( `How you felt the entire week?` ~ Instagram + LinkedIn + SnapChat + Twitter + `Whatsapp/Wechat` + youtube + OTT + Reddit,
+#### Model Development
+
+``` r
+model <- lm(social_media_numeric$Trouble_falling_asleep  ~ social_media_numeric$Instagram + social_media_numeric$LinkedIn + social_media_numeric$SnapChat + social_media_numeric$Twitter + social_media_numeric$`Whatsapp/Wechat` + social_media_numeric$youtube + social_media_numeric$OTT + social_media_numeric$Reddit,
   data = social_media_numeric
 )
-
 summary(model)
 ```
 
     ## 
     ## Call:
-    ## lm(formula = `How you felt the entire week?` ~ Instagram + LinkedIn + 
-    ##     SnapChat + Twitter + `Whatsapp/Wechat` + youtube + OTT + 
-    ##     Reddit, data = social_media_numeric)
+    ## lm(formula = social_media_numeric$Trouble_falling_asleep ~ social_media_numeric$Instagram + 
+    ##     social_media_numeric$LinkedIn + social_media_numeric$SnapChat + 
+    ##     social_media_numeric$Twitter + social_media_numeric$`Whatsapp/Wechat` + 
+    ##     social_media_numeric$youtube + social_media_numeric$OTT + 
+    ##     social_media_numeric$Reddit, data = social_media_numeric)
     ## 
     ## Residuals:
     ##      Min       1Q   Median       3Q      Max 
-    ## -1.14225 -0.32574 -0.04625  0.48405  1.49274 
+    ## -0.47240 -0.26171 -0.04857  0.14431  0.71319 
     ## 
     ## Coefficients:
-    ##                   Estimate Std. Error t value Pr(>|t|)   
-    ## (Intercept)        2.72840    0.67742   4.028  0.00168 **
-    ## Instagram         -0.03070    0.06417  -0.478  0.64091   
-    ## LinkedIn           0.13054    0.08635   1.512  0.15647   
-    ## SnapChat           0.04185    0.06246   0.670  0.51553   
-    ## Twitter            0.16850    0.27181   0.620  0.54692   
-    ## `Whatsapp/Wechat`  0.05279    0.06756   0.781  0.44969   
-    ## youtube            0.03106    0.13556   0.229  0.82263   
-    ## OTT               -0.07842    0.09259  -0.847  0.41357   
-    ## Reddit            -0.03435    0.12297  -0.279  0.78475   
+    ##                                        Estimate Std. Error t value Pr(>|t|)  
+    ## (Intercept)                             0.02935    0.36730   0.080    0.938  
+    ## social_media_numeric$Instagram          0.07008    0.03479   2.014    0.067 .
+    ## social_media_numeric$LinkedIn          -0.02846    0.04682  -0.608    0.555  
+    ## social_media_numeric$SnapChat           0.05725    0.03387   1.690    0.117  
+    ## social_media_numeric$Twitter            0.03816    0.14738   0.259    0.800  
+    ## social_media_numeric$`Whatsapp/Wechat` -0.02922    0.03663  -0.798    0.441  
+    ## social_media_numeric$youtube            0.04025    0.07350   0.548    0.594  
+    ## social_media_numeric$OTT               -0.02642    0.05020  -0.526    0.608  
+    ## social_media_numeric$Reddit            -0.02379    0.06667  -0.357    0.727  
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 0.8174 on 12 degrees of freedom
-    ## Multiple R-squared:  0.2805, Adjusted R-squared:  -0.1991 
-    ## F-statistic: 0.5849 on 8 and 12 DF,  p-value: 0.7729
+    ## Residual standard error: 0.4432 on 12 degrees of freedom
+    ## Multiple R-squared:  0.495,  Adjusted R-squared:  0.1583 
+    ## F-statistic:  1.47 on 8 and 12 DF,  p-value: 0.2639
+
+<p>
+In this step, I loaded the dataset and fitted a multiple regression
+model using the lm() function. The model predicts the How you felt the
+entire week? based on several predictor variables like: Instagram,
+LinkedIn, SnapChat, Twitter, Whatsapp, Youtube, OTT and Reddit
+acceleration.
+</p>
+<p>
+The statistical significance of each coefficient, we look at their
+corresponding t-values and p-values. If a predictor variable has a low
+p-value (usually less than 0.05), it suggests that the variable is
+statistically significant in explaining the variability in trouble with
+sleep. In simpler terms, it means that the variable likely has a genuine
+impact on sleep issues.
+</p>
+
+#### Model Acceptance
 
 ``` r
-vif(model)
+coefficients(model)
 ```
 
-    ##         Instagram          LinkedIn          SnapChat           Twitter 
-    ##          1.524923          1.367600          1.402359          3.684365 
-    ## `Whatsapp/Wechat`           youtube               OTT            Reddit 
-    ##          2.216573          1.660846          3.199078          1.148110
+    ##                            (Intercept)         social_media_numeric$Instagram 
+    ##                             0.02935003                             0.07007642 
+    ##          social_media_numeric$LinkedIn          social_media_numeric$SnapChat 
+    ##                            -0.02846038                             0.05724962 
+    ##           social_media_numeric$Twitter social_media_numeric$`Whatsapp/Wechat` 
+    ##                             0.03816260                            -0.02922242 
+    ##           social_media_numeric$youtube               social_media_numeric$OTT 
+    ##                             0.04025224                            -0.02641988 
+    ##            social_media_numeric$Reddit 
+    ##                            -0.02379311
 
 ``` r
-# Plot the residuals vs fitted values
+confint(model,level=0.95)
+```
+
+    ##                                               2.5 %     97.5 %
+    ## (Intercept)                            -0.770927154 0.82962722
+    ## social_media_numeric$Instagram         -0.005728035 0.14588087
+    ## social_media_numeric$LinkedIn          -0.130465001 0.07354424
+    ## social_media_numeric$SnapChat          -0.016539324 0.13103857
+    ## social_media_numeric$Twitter           -0.282947122 0.35927233
+    ## social_media_numeric$`Whatsapp/Wechat` -0.109032432 0.05058759
+    ## social_media_numeric$youtube           -0.119892516 0.20039700
+    ## social_media_numeric$OTT               -0.135799283 0.08295953
+    ## social_media_numeric$Reddit            -0.169058947 0.12147272
+
+``` r
+fitted(model)
+```
+
+    ##           1           2           3           4           5           6 
+    ##  0.03767577  0.68297470 -0.14111191  0.20249080  0.85568960 -0.12780750 
+    ##           7           8           9          10          11          12 
+    ##  0.23700749  0.28681294  0.47239558  0.13256374  0.41692826  0.27284963 
+    ##          13          14          15          16          17          18 
+    ##  1.09915634  0.43420708  0.04857065  0.41826973  0.41113911  0.32212351 
+    ##          19          20          21 
+    ##  0.26171236  0.88332910 -0.20697699
+
+#### Residual Analysis
+
+``` r
+residuals(model)
+```
+
+    ##           1           2           3           4           5           6 
+    ## -0.03767577  0.31702530  0.14111191 -0.20249080  0.14431040  0.12780750 
+    ##           7           8           9          10          11          12 
+    ## -0.23700749  0.71318706 -0.47239558 -0.13256374  0.58307174 -0.27284963 
+    ##          13          14          15          16          17          18 
+    ## -0.09915634 -0.43420708 -0.04857065  0.58173027 -0.41113911 -0.32212351 
+    ##          19          20          21 
+    ## -0.26171236  0.11667090  0.20697699
+
+``` r
+anova(model)
+```
+
+    ## Analysis of Variance Table
+    ## 
+    ## Response: social_media_numeric$Trouble_falling_asleep
+    ##                                        Df  Sum Sq Mean Sq F value  Pr(>F)  
+    ## social_media_numeric$Instagram          1 1.19181 1.19181  6.0682 0.02985 *
+    ## social_media_numeric$LinkedIn           1 0.14215 0.14215  0.7238 0.41156  
+    ## social_media_numeric$SnapChat           1 0.54677 0.54677  2.7839 0.12108  
+    ## social_media_numeric$Twitter            1 0.00972 0.00972  0.0495 0.82772  
+    ## social_media_numeric$`Whatsapp/Wechat`  1 0.26490 0.26490  1.3488 0.26808  
+    ## social_media_numeric$youtube            1 0.04226 0.04226  0.2152 0.65103  
+    ## social_media_numeric$OTT                1 0.08720 0.08720  0.4440 0.51780  
+    ## social_media_numeric$Reddit             1 0.02501 0.02501  0.1274 0.72739  
+    ## Residuals                              12 2.35684 0.19640                  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+``` r
+plot(model)
+```
+
+![](Social-Media_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->![](Social-Media_files/figure-gfm/unnamed-chunk-17-2.png)<!-- -->![](Social-Media_files/figure-gfm/unnamed-chunk-17-3.png)<!-- -->
+
+    ## Warning in sqrt(crit * p * (1 - hh)/hh): NaNs produced
+
+    ## Warning in sqrt(crit * p * (1 - hh)/hh): NaNs produced
+
+![](Social-Media_files/figure-gfm/unnamed-chunk-17-4.png)<!-- -->
+
+``` r
+avPlots(model)
+```
+
+![](Social-Media_files/figure-gfm/unnamed-chunk-17-5.png)<!-- -->
+
+``` r
+cutoff <- 17/((nrow(social_media)-length(model$coefficients)-2))
+plot(model, which=4, cook.levels=cutoff)
+```
+
+![](Social-Media_files/figure-gfm/unnamed-chunk-17-6.png)<!-- -->
+
+``` r
+influencePlot(model, id.method="identify", main="Influence Plot", sub="Circle size is proportial to Cook's Distance" )
+```
+
+    ## Warning in plot.window(...): "id.method" is not a graphical parameter
+
+    ## Warning in plot.xy(xy, type, ...): "id.method" is not a graphical parameter
+
+    ## Warning in axis(side = side, at = at, labels = labels, ...): "id.method" is not
+    ## a graphical parameter
+
+    ## Warning in axis(side = side, at = at, labels = labels, ...): "id.method" is not
+    ## a graphical parameter
+
+    ## Warning in box(...): "id.method" is not a graphical parameter
+
+    ## Warning in title(...): "id.method" is not a graphical parameter
+
+    ## Warning in plot.xy(xy.coords(x, y), type = type, ...): "id.method" is not a
+    ## graphical parameter
+
+![](Social-Media_files/figure-gfm/unnamed-chunk-17-7.png)<!-- -->
+
+    ##       StudRes       Hat      CookD
+    ## 8   1.9283209 0.1457607 0.05747738
+    ## 11  1.7930758 0.3622253 0.17127619
+    ## 13 -0.6643396 0.8918546 0.42415845
+    ## 15 -0.6322389 0.9714537 1.59103287
+
+``` r
+qqPlot(model, main="QQ Plot")
+```
+
+![](Social-Media_files/figure-gfm/unnamed-chunk-17-8.png)<!-- -->
+
+    ## [1]  8 11
+
+``` r
+ggpairs(data=social_media_numeric, title="Social Media")
+```
+
+![](Social-Media_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+
+``` r
 ggplot(social_media_numeric, aes(x = fitted(model), y = residuals(model))) +
   geom_point(alpha = 0.5) +
   labs(title = "Residuals vs Fitted Values", x = "Fitted Values", y = "Residuals")
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-18-2.png)<!-- -->
+<p>
+The residual vs. fitted plot is a tool used to evaluate the assumptions
+and adequacy of a regression model. It helps to identify whether the
+model adequately captures the underlying relationships in the data or if
+there are issues that need to be addressed. The plot shows a pattern of
+points around zero, the model is not appropriate.
+</p>
+
+#### Prediction
+
+<p>
+The predict() function will generate predicted values of the dependent
+variable (Total_revenue) based on the provided predictors.
+</p>
 
 ``` r
-# QQ-plot for normality check
-qqnorm(residuals(model))
-qqline(residuals(model))
+new_data_pd <- data.frame(
+  character = "masinl",
+  Instagram = 3.50,
+  LinkedIn = 4.00,
+  SnapChat = 1.00,
+  Twitter = 5.00,
+  `Whatsapp/Wechat` = 1.00,
+  youtube = 2.50,
+  OTT = 14.50,
+  Reddit = 2.50,
+  Trouble_falling_asleep = 0,
+  Mood = 1,
+  Productivity = 0,
+  Tired_waking_up_in_morning = 3,
+  `How you felt the entire week?` = 3
+)
+
+predicted_pd <- predict(model, newdata = new_data_pd)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->
+    ## Warning: 'newdata' had 1 row but variables found have 21 rows
+
+``` r
+predicted_pd
+```
+
+    ##           1           2           3           4           5           6 
+    ##  0.03767577  0.68297470 -0.14111191  0.20249080  0.85568960 -0.12780750 
+    ##           7           8           9          10          11          12 
+    ##  0.23700749  0.28681294  0.47239558  0.13256374  0.41692826  0.27284963 
+    ##          13          14          15          16          17          18 
+    ##  1.09915634  0.43420708  0.04857065  0.41826973  0.41113911  0.32212351 
+    ##          19          20          21 
+    ##  0.26171236  0.88332910 -0.20697699
+
+``` r
+summary(predicted_pd)
+```
+
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    ## -0.2070  0.1326  0.2868  0.3333  0.4342  1.0992
+
+#### Model Accuracy
+
+``` r
+rsquared <- summary(model)$r.squared
+cat("R-squared:", rsquared, "\n")
+```
+
+    ## R-squared: 0.494963
+
+``` r
+adjusted_rsquared <- summary(model)$adj.r.squared
+cat("Adjusted R-squared:", adjusted_rsquared, "\n")
+```
+
+    ## Adjusted R-squared: 0.1582717
+
+``` r
+predictions <- predict(model)
+rmse <- sqrt(mean((social_media$Instagram - predictions)^2))
+cat("RMSE:", rmse, "\n")
+```
+
+    ## RMSE: 6.442152
