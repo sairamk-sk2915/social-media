@@ -1189,7 +1189,7 @@ points around zero, the model is not appropriate.
 
 <p>
 The predict() function will generate predicted values of the dependent
-variable (Total_revenue) based on the provided predictors.
+variable (Trouble_falling_asleep) based on the provided predictors.
 </p>
 
 ``` r
@@ -1258,3 +1258,199 @@ cat("RMSE:", rmse, "\n")
 ```
 
     ## RMSE: 6.442152
+
+### Logistic Regression Analysis
+
+<p>
+To perform logistic regression analysis, we will use the glm() function.
+</p>
+
+- Load all necessary packages
+- Load Data. we Used read_excel() function to read data from excel
+- Now we will use glm() function to fit a logistic regression model to
+  the data.
+- Now use summary() function for logistic regression model to view
+  coefficients, standard errors, z-values, and p-values.
+- For Residual Analysis use plot() function to get Plot diagnostic
+  plots, including residuals vs. fitted values, QQ plot of residuals,
+  and scale-location plot, to check for homoscedasticity and normality
+  of residuals.
+
+#### Model Development
+
+``` r
+library(readxl)
+library(dplyr)
+library(ROCR)
+```
+
+    ## Warning: package 'ROCR' was built under R version 4.3.3
+
+``` r
+library(pROC)
+```
+
+    ## Type 'citation("pROC")' for a citation.
+
+    ## 
+    ## Attaching package: 'pROC'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     cov, smooth, var
+
+``` r
+social_media <- read_excel("social_media_cleaned.xlsx")
+social_media_numeric <- select_if(social_media, is.numeric)
+```
+
+``` r
+threshold <- 200
+
+social_media$tfs_Binary <- ifelse(social_media$Trouble_falling_asleep > threshold, 1, 0)
+
+logit_model <- glm(tfs_Binary ~  Instagram + LinkedIn + SnapChat + Twitter + youtube + OTT + `Whatsapp/Wechat`, data = social_media, 
+                    family = binomial)
+```
+
+<p>
+The code reads a dataset and preprocesses it to create a binary outcome
+variable based on a threshold.
+</p>
+<p>
+It fits a logistic regression model using three predictor variables:
+<p>
+Total_Sessions, Conversion_Rate, and Avg_Session_Duration.
+</p>
+This model development process involves specifying the model formula,
+fitting the model to the data, and obtaining a summary of the model’s
+coefficients and statistical significance.
+</p>
+
+#### Model Acceptance
+
+``` r
+summary(logit_model)
+```
+
+    ## 
+    ## Call:
+    ## glm(formula = tfs_Binary ~ Instagram + LinkedIn + SnapChat + 
+    ##     Twitter + youtube + OTT + `Whatsapp/Wechat`, family = binomial, 
+    ##     data = social_media)
+    ## 
+    ## Coefficients:
+    ##                     Estimate Std. Error z value Pr(>|z|)
+    ## (Intercept)       -2.557e+01  1.724e+05       0        1
+    ## Instagram         -1.142e-15  1.685e+04       0        1
+    ## LinkedIn          -3.004e-15  2.275e+04       0        1
+    ## SnapChat          -4.596e-16  1.639e+04       0        1
+    ## Twitter           -7.076e-16  7.070e+04       0        1
+    ## youtube            2.353e-15  3.578e+04       0        1
+    ## OTT                3.847e-16  2.331e+04       0        1
+    ## `Whatsapp/Wechat` -9.476e-18  1.743e+04       0        1
+    ## 
+    ## (Dispersion parameter for binomial family taken to be 1)
+    ## 
+    ##     Null deviance: 0.0000e+00  on 20  degrees of freedom
+    ## Residual deviance: 3.3117e-10  on 13  degrees of freedom
+    ## AIC: 16
+    ## 
+    ## Number of Fisher Scoring iterations: 24
+
+``` r
+anova(logit_model)
+```
+
+    ## Analysis of Deviance Table
+    ## 
+    ## Model: binomial, link: logit
+    ## 
+    ## Response: tfs_Binary
+    ## 
+    ## Terms added sequentially (first to last)
+    ## 
+    ## 
+    ##                   Df Deviance Resid. Df Resid. Dev
+    ## NULL                                 20 0.0000e+00
+    ## Instagram          1        0        19 3.3117e-10
+    ## LinkedIn           1        0        18 3.3117e-10
+    ## SnapChat           1        0        17 3.3117e-10
+    ## Twitter            1        0        16 3.3117e-10
+    ## youtube            1        0        15 3.3117e-10
+    ## OTT                1        0        14 3.3117e-10
+    ## `Whatsapp/Wechat`  1        0        13 3.3117e-10
+
+<p>
+The coefficients represent the estimated effect of each predictor
+variable on the log-odds of the outcome variable being in the positive
+class (1).
+</p>
+<p>
+For example, the coefficient for Total_Sessions is approximately
+0.0002231, indicating that for each unit increase in Total_Sessions, the
+log-odds of the outcome variable being in the positive class increases
+by 0.0002231 units.
+</p>
+<p>
+The coefficients for Conversion_Rate and Avg_Session_Duration are
+1.1609186 and -0.1110208, respectively.
+</p>
+
+#### Residual Analysis
+
+``` r
+# Residual Analysis
+residuals(logit_model)
+```
+
+    ##             1             2             3             4             5 
+    ## -3.971152e-06 -3.971152e-06 -3.971152e-06 -3.971152e-06 -3.971152e-06 
+    ##             6             7             8             9            10 
+    ## -3.971152e-06 -3.971152e-06 -3.971152e-06 -3.971152e-06 -3.971152e-06 
+    ##            11            12            13            14            15 
+    ## -3.971152e-06 -3.971152e-06 -3.971152e-06 -3.971152e-06 -3.971152e-06 
+    ##            16            17            18            19            20 
+    ## -3.971152e-06 -3.971152e-06 -3.971152e-06 -3.971152e-06 -3.971152e-06 
+    ##            21 
+    ## -3.971152e-06
+
+``` r
+plot(logit_model)
+```
+
+![](Social-Media_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->![](Social-Media_files/figure-gfm/unnamed-chunk-24-2.png)<!-- -->![](Social-Media_files/figure-gfm/unnamed-chunk-24-3.png)<!-- -->![](Social-Media_files/figure-gfm/unnamed-chunk-24-4.png)<!-- -->
+<p>
+Function calculates the residuals for the fitted logistic regression
+model (logit_model). It returns a vector containing the residuals.
+</p>
+<p>
+Plot() function generates diagnostic plots for the logistic regression
+model (logit_model).diagnostic plots including residuals vs. fitted
+values, quantile-quantile (Q-Q) plot, and leverage plot
+</p>
+
+#### Prediction
+
+\`\`\`{r}s
+
+
+    #### Model Accuracy
+
+    ```r
+    predicted <- predict(logit_model, type = "response")
+    predicted_binary <- ifelse(predicted > 0.5, 1, 0)
+    confusion <- table(predicted_binary, social_media$tfs_Binary)
+    accuracy <- sum(diag(confusion)) / sum(confusion)
+    print(accuracy)
+
+    ## [1] 1
+
+<p>
+The code reads a dataset from an Excel file, preprocesses it to create a
+binary outcome variable based on a threshold, fits a logistic regression
+model to predict this outcome using three predictor variables, conducts
+residual analysis, evaluates model performance using ROC curve and
+calculates AUC, makes predictions for a subset of the data, and assesses
+model accuracy metrics including accuracy and precision.
+</p>
