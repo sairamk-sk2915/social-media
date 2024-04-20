@@ -1189,7 +1189,7 @@ points around zero, the model is not appropriate.
 
 <p>
 The predict() function will generate predicted values of the dependent
-variable (Total_revenue) based on the provided predictors.
+variable (Trouble_falling_asleep) based on the provided predictors.
 </p>
 
 ``` r
@@ -1258,3 +1258,476 @@ cat("RMSE:", rmse, "\n")
 ```
 
     ## RMSE: 6.442152
+
+### Logistic Regression Analysis
+
+<p>
+To perform logistic regression analysis, we will use the glm() function.
+</p>
+
+- Load all necessary packages
+- Load Data. we Used read_excel() function to read data from excel
+- Now we will use glm() function to fit a logistic regression model to
+  the data.
+- Now use summary() function for logistic regression model to view
+  coefficients, standard errors, z-values, and p-values.
+- For Residual Analysis use plot() function to get Plot diagnostic
+  plots, including residuals vs. fitted values, QQ plot of residuals,
+  and scale-location plot, to check for homoscedasticity and normality
+  of residuals.
+
+#### Model Development
+
+``` r
+library(readxl)
+library(dplyr)
+library(ROCR)
+```
+
+    ## Warning: package 'ROCR' was built under R version 4.3.3
+
+``` r
+library(pROC)
+```
+
+    ## Type 'citation("pROC")' for a citation.
+
+    ## 
+    ## Attaching package: 'pROC'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     cov, smooth, var
+
+``` r
+social_media <- read_excel("social_media_cleaned.xlsx")
+social_media_numeric <- select_if(social_media, is.numeric)
+```
+
+<p>
+A logistic regression model is created to estimate the probability of
+encountering sleep difficulties using Instagram, WhatsApp, OTT, and
+YouTube usage as predictors.
+</p>
+
+``` r
+Instagram_lab <- cut(social_media$Instagram, breaks = c(-Inf, 6, Inf), labels = c("Low Usage", "High Usage"))
+WhatsApp_lab <- cut(social_media$`Whatsapp/Wechat`, breaks = c(-Inf, 6, Inf), labels = c("Low Usage", "High Usage"))
+OTT_lab <- cut(social_media$OTT, breaks = c(-Inf, 6, Inf), labels = c("Low Usage", "High Usage"))
+YouTube_lab <- cut(social_media$youtube, breaks = c(-Inf, 6, Inf), labels = c("Low Usage", "High Usage"))
+
+combined_lab <- interaction(WhatsApp_lab, OTT_lab, YouTube_lab)
+
+tfs_table <- xtabs(~ Trouble_falling_asleep + combined_lab, data=social_media) 
+tfs_table
+```
+
+    ##                       combined_lab
+    ## Trouble_falling_asleep Low Usage.Low Usage.Low Usage
+    ##                      0                             5
+    ##                      1                             5
+    ##                       combined_lab
+    ## Trouble_falling_asleep High Usage.Low Usage.Low Usage
+    ##                      0                              7
+    ##                      1                              1
+    ##                       combined_lab
+    ## Trouble_falling_asleep Low Usage.High Usage.Low Usage
+    ##                      0                              1
+    ##                      1                              0
+    ##                       combined_lab
+    ## Trouble_falling_asleep High Usage.High Usage.Low Usage
+    ##                      0                               0
+    ##                      1                               1
+    ##                       combined_lab
+    ## Trouble_falling_asleep Low Usage.Low Usage.High Usage
+    ##                      0                              0
+    ##                      1                              0
+    ##                       combined_lab
+    ## Trouble_falling_asleep High Usage.Low Usage.High Usage
+    ##                      0                               1
+    ##                      1                               0
+    ##                       combined_lab
+    ## Trouble_falling_asleep Low Usage.High Usage.High Usage
+    ##                      0                               0
+    ##                      1                               0
+    ##                       combined_lab
+    ## Trouble_falling_asleep High Usage.High Usage.High Usage
+    ##                      0                                0
+    ##                      1                                0
+
+``` r
+logit_model <- glm(Trouble_falling_asleep ~  Instagram + `Whatsapp/Wechat` + OTT + youtube, data = social_media, 
+                    family = binomial)
+```
+
+<p>
+The code reads a dataset and preprocesses it to create a binary outcome
+variable based on a threshold.
+</p>
+<p>
+It fits a logistic regression model using three predictor variables:
+<p>
+Total_Sessions, Conversion_Rate, and Avg_Session_Duration.
+</p>
+This model development process involves specifying the model formula,
+fitting the model to the data, and obtaining a summary of the model’s
+coefficients and statistical significance.
+</p>
+
+#### Model Acceptance
+
+``` r
+summary(logit_model)
+```
+
+    ## 
+    ## Call:
+    ## glm(formula = Trouble_falling_asleep ~ Instagram + `Whatsapp/Wechat` + 
+    ##     OTT + youtube, family = binomial, data = social_media)
+    ## 
+    ## Coefficients:
+    ##                   Estimate Std. Error z value Pr(>|z|)  
+    ## (Intercept)        -3.1311     2.0675  -1.514   0.1299  
+    ## Instagram           0.9933     0.5214   1.905   0.0568 .
+    ## `Whatsapp/Wechat`  -0.4055     0.2767  -1.465   0.1428  
+    ## OTT                -0.2050     0.3500  -0.586   0.5581  
+    ## youtube            -0.4078     0.5084  -0.802   0.4224  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## (Dispersion parameter for binomial family taken to be 1)
+    ## 
+    ##     Null deviance: 26.734  on 20  degrees of freedom
+    ## Residual deviance: 16.122  on 16  degrees of freedom
+    ## AIC: 26.122
+    ## 
+    ## Number of Fisher Scoring iterations: 6
+
+``` r
+anova(logit_model)
+```
+
+    ## Analysis of Deviance Table
+    ## 
+    ## Model: binomial, link: logit
+    ## 
+    ## Response: Trouble_falling_asleep
+    ## 
+    ## Terms added sequentially (first to last)
+    ## 
+    ## 
+    ##                   Df Deviance Resid. Df Resid. Dev
+    ## NULL                                 20     26.734
+    ## Instagram          1   5.9366        19     20.797
+    ## `Whatsapp/Wechat`  1   3.3483        18     17.449
+    ## OTT                1   0.6339        17     16.815
+    ## youtube            1   0.6927        16     16.122
+
+<p>
+The coefficients represent the estimated effect of each predictor
+variable on the log-odds of the outcome variable being in the positive
+class (1).
+</p>
+<p>
+For example, the coefficient for Total_Sessions is approximately
+0.0002231, indicating that for each unit increase in Total_Sessions, the
+log-odds of the outcome variable being in the positive class increases
+by 0.0002231 units.
+</p>
+<p>
+The coefficients for Conversion_Rate and Avg_Session_Duration are
+1.1609186 and -0.1110208, respectively.
+</p>
+
+#### Residual Analysis
+
+``` r
+# Residual Analysis
+residuals(logit_model)
+```
+
+    ##           1           2           3           4           5           6 
+    ## -0.18566301  0.75119378 -0.14561863 -0.73897415  0.08032908 -0.01458191 
+    ##           7           8           9          10          11          12 
+    ## -0.64722166  1.91673384 -1.49482860 -0.14181556  0.93227777 -0.37238419 
+    ##          13          14          15          16          17          18 
+    ##  1.10255495 -1.27161868 -0.34050877  1.37328298 -0.93695033 -1.16612969 
+    ##          19          20          21 
+    ## -0.28016130  0.66281236 -0.06369927
+
+``` r
+plot(logit_model)
+```
+
+![](Social-Media_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->![](Social-Media_files/figure-gfm/unnamed-chunk-24-2.png)<!-- -->![](Social-Media_files/figure-gfm/unnamed-chunk-24-3.png)<!-- -->![](Social-Media_files/figure-gfm/unnamed-chunk-24-4.png)<!-- -->
+<p>
+Function calculates the residuals for the fitted logistic regression
+model (logit_model). It returns a vector containing the residuals.
+</p>
+<p>
+Plot() function generates diagnostic plots for the logistic regression
+model (logit_model).diagnostic plots including residuals vs. fitted
+values, quantile-quantile (Q-Q) plot, and leverage plot
+</p>
+
+#### Prediction
+
+``` r
+predicted.social_media <- data.frame(probability.of.hd=logit_model$fitted.values,Instagram=Instagram_lab)
+predicted.social_media
+```
+
+    ##    probability.of.hd  Instagram
+    ## 1       0.0170876964  Low Usage
+    ## 2       0.7541635351 High Usage
+    ## 3       0.0105463853  Low Usage
+    ## 4       0.2389387173  Low Usage
+    ## 5       0.9967788189 High Usage
+    ## 6       0.0001063104  Low Usage
+    ## 7       0.1889681357  Low Usage
+    ## 8       0.1593050582 High Usage
+    ## 9       0.6728237506 High Usage
+    ## 10      0.0100054356  Low Usage
+    ## 11      0.6475424542  Low Usage
+    ## 12      0.0669859260  Low Usage
+    ## 13      0.5445400913  Low Usage
+    ## 14      0.5544772814  Low Usage
+    ## 15      0.0563246788  Low Usage
+    ## 16      0.3894759862 High Usage
+    ## 17      0.3552792216 High Usage
+    ## 18      0.4933471513 High Usage
+    ## 19      0.0384850609  Low Usage
+    ## 20      0.8027916097 High Usage
+    ## 21      0.0020267421  Low Usage
+
+``` r
+xtabs(~ probability.of.hd + Instagram_lab, data=predicted.social_media)
+```
+
+    ##                       Instagram_lab
+    ## probability.of.hd      Low Usage High Usage
+    ##   0.000106310405142039         1          0
+    ##   0.00202674209473538          1          0
+    ##   0.0100054356005231           1          0
+    ##   0.0105463853023756           1          0
+    ##   0.0170876964470418           1          0
+    ##   0.0384850608915139           1          0
+    ##   0.0563246788118772           1          0
+    ##   0.0669859259800531           1          0
+    ##   0.159305058189231            0          1
+    ##   0.188968135679654            1          0
+    ##   0.238938717318894            1          0
+    ##   0.355279221618185            0          1
+    ##   0.389475986241142            0          1
+    ##   0.493347151294844            0          1
+    ##   0.544540091273624            1          0
+    ##   0.554477281378253            1          0
+    ##   0.647542454229279            1          0
+    ##   0.672823750589308            0          1
+    ##   0.754163535086335            0          1
+    ##   0.80279160974752             0          1
+    ##   0.996778818858776            0          1
+
+``` r
+logit_model2 <- glm(Trouble_falling_asleep ~ ., data=social_media, family="binomial")
+summary(logit_model2)
+```
+
+    ## 
+    ## Call:
+    ## glm(formula = Trouble_falling_asleep ~ ., family = "binomial", 
+    ##     data = social_media)
+    ## 
+    ## Coefficients: (11 not defined because of singularities)
+    ##                                   Estimate Std. Error z value Pr(>|z|)
+    ## (Intercept)                      2.557e+01  2.160e+05       0        1
+    ## character19!@s                   2.728e-09  3.055e+05       0        1
+    ## character2134                   -5.113e+01  3.055e+05       0        1
+    ## characterak2001                 -5.113e+01  3.055e+05       0        1
+    ## characterAKIRA                  -5.113e+01  3.055e+05       0        1
+    ## characterBaiqi                  -5.113e+01  3.055e+05       0        1
+    ## characterBunny                  -5.113e+01  3.055e+05       0        1
+    ## characterdrphy                  -5.113e+01  3.055e+05       0        1
+    ## characterds2134                 -5.113e+01  3.055e+05       0        1
+    ## characterhahah                  -5.113e+01  3.055e+05       0        1
+    ## characterHarvey                  1.038e-07  3.055e+05       0        1
+    ## characterki567                   1.059e-07  3.055e+05       0        1
+    ## charactermasinl                 -5.113e+01  3.055e+05       0        1
+    ## characterMVA37@S                -5.113e+01  3.055e+05       0        1
+    ## characterPatty                  -5.113e+01  3.055e+05       0        1
+    ## characterpeace                   3.846e-09  3.055e+05       0        1
+    ## charactersss32                  -5.113e+01  3.055e+05       0        1
+    ## charactertl868                   1.435e-09  3.055e+05       0        1
+    ## charactertrave                  -5.113e+01  3.055e+05       0        1
+    ## charactervp1234                  1.022e-07  3.055e+05       0        1
+    ## characteryh2020                 -5.113e+01  3.055e+05       0        1
+    ## Instagram                               NA         NA      NA       NA
+    ## LinkedIn                                NA         NA      NA       NA
+    ## SnapChat                                NA         NA      NA       NA
+    ## Twitter                                 NA         NA      NA       NA
+    ## `Whatsapp/Wechat`                       NA         NA      NA       NA
+    ## youtube                                 NA         NA      NA       NA
+    ## OTT                                     NA         NA      NA       NA
+    ## Reddit                                  NA         NA      NA       NA
+    ## `Mood Productivity`                     NA         NA      NA       NA
+    ## `Tired waking up in morning`            NA         NA      NA       NA
+    ## `How you felt the entire week?`         NA         NA      NA       NA
+    ## 
+    ## (Dispersion parameter for binomial family taken to be 1)
+    ## 
+    ##     Null deviance: 2.6734e+01  on 20  degrees of freedom
+    ## Residual deviance: 3.3117e-10  on  0  degrees of freedom
+    ## AIC: 42
+    ## 
+    ## Number of Fisher Scoring iterations: 24
+
+``` r
+predict_data <- predict(logit_model2,newdata=social_media,type="response" )
+```
+
+    ## Warning in predict.lm(object, newdata, se.fit, scale = 1, type = if (type == :
+    ## prediction from rank-deficient fit; attr(*, "non-estim") has doubtful cases
+
+``` r
+predict_data
+```
+
+    ##            1            2            3            4            5            6 
+    ## 7.884924e-12 1.000000e+00 7.884924e-12 7.884924e-12 1.000000e+00 7.884924e-12 
+    ##            7            8            9           10           11           12 
+    ## 7.884924e-12 1.000000e+00 7.884924e-12 7.884924e-12 1.000000e+00 7.884924e-12 
+    ##           13           14           15           16           17           18 
+    ## 1.000000e+00 7.884924e-12 7.884924e-12 1.000000e+00 7.884924e-12 7.884924e-12 
+    ##           19           20           21 
+    ## 7.884924e-12 1.000000e+00 7.884924e-12 
+    ## attr(,"non-estim")
+    ##  1  2  3  5  7  9 11 13 16 17 18 20 
+    ##  1  2  3  5  7  9 11 13 16 17 18 20
+
+``` r
+social_media$Trouble_falling_asleep
+```
+
+    ##  [1] 0 1 0 0 1 0 0 1 0 0 1 0 1 0 0 1 0 0 0 1 0
+
+``` r
+predict_dataF <- as.factor(ifelse(test=as.numeric(predict_data>0.5) == 0, yes="0", no="1"))
+roc(social_media$Trouble_falling_asleep,logit_model2$fitted.values,plot=TRUE)
+```
+
+    ## Setting levels: control = 0, case = 1
+
+    ## Setting direction: controls < cases
+
+![](Social-Media_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
+
+    ## 
+    ## Call:
+    ## roc.default(response = social_media$Trouble_falling_asleep, predictor = logit_model2$fitted.values,     plot = TRUE)
+    ## 
+    ## Data: logit_model2$fitted.values in 14 controls (social_media$Trouble_falling_asleep 0) < 7 cases (social_media$Trouble_falling_asleep 1).
+    ## Area under the curve: 1
+
+``` r
+predicted_prob <- predict(logit_model2, type = "response")
+
+# Create prediction object
+predictions <- prediction(predicted_prob, predict_dataF)
+
+roc_curve <- roc(social_media$Trouble_falling_asleep, predicted_prob)
+```
+
+    ## Setting levels: control = 0, case = 1
+    ## Setting direction: controls < cases
+
+``` r
+# Plot ROC curve
+plot(roc_curve, main = "ROC Curve", col = "blue", lwd = 2)
+abline(a = 0, b = 1, lty = 2, col = "red")
+```
+
+![](Social-Media_files/figure-gfm/unnamed-chunk-25-2.png)<!-- -->
+
+``` r
+auc_value <- auc(roc_curve)
+cat("AUC:", auc_value, "\n")
+```
+
+    ## AUC: 1
+
+``` r
+# Calculate performance measures
+perf <- performance(predictions, "tpr", "fpr")
+
+# Plot ROC curve
+plot(perf, main = "ROC Curve", col = "blue", lwd = 2)
+abline(a = 0, b = 1, lty = 2, col = "red")
+```
+
+![](Social-Media_files/figure-gfm/unnamed-chunk-25-3.png)<!-- -->
+
+``` r
+# Plot ROC curve
+plot(perf, main = "ROC Curve", col = "blue", lwd = 2, 
+     xlab = "False Positive Rate", ylab = "True Positive Rate", 
+     xlim = c(0, 1), ylim = c(0, 1))
+abline(a = 0, b = 1, lty = 2, col = "red")  # Diagonal line for reference
+
+# Add AUC value to the plot
+auc_value <- performance(predictions, "auc")@y.values[[1]]
+text(0.5, 0.5, paste("AUC =", round(auc_value, 2)), col = "#4daf4a", lwd=4)
+
+plot.roc(social_media$Trouble_falling_asleep , logit_model2$fitted.values, percent=TRUE, col="#4daf4a", lwd=4, print.auc=TRUE, add=TRUE, print.auc.y=40)
+```
+
+    ## Setting levels: control = 0, case = 1
+    ## Setting direction: controls < cases
+
+``` r
+legend("bottomright", legend=c("Simple", "Non Simple"), col=c("#377eb8", "#4daf4a"), lwd=4) 
+```
+
+![](Social-Media_files/figure-gfm/unnamed-chunk-25-4.png)<!-- -->
+
+<p>
+The logistic regression model estimates the likelihood of experiencing
+trouble sleeping based on various predictors, including social media
+usage and user characteristics. However, due to singularities in the
+data, some coefficients are not defined. The model suggests that
+characteristics such as “character19!@s” and “characterpeace” have
+negligible impact on the likelihood of trouble sleeping, as indicated by
+their small coefficients close to zero.
+</p>
+<p>
+For example, individuals with usernames like “masinl”, “peace”, and
+“tl868”, who spend more time on Instagram, are predicted to have a
+higher probability (0.75) of experiencing trouble sleeping. Conversely,
+individuals such as “Patty” and “Bunny”, who spend less time on Twitter,
+are predicted to have a lower probability (0.235) of experiencing
+trouble sleeping. However, it’s important to note that the model
+coefficients for specific social media platforms like Instagram,
+LinkedIn, Snapchat, and others are not defined, suggesting that these
+variables may not significantly contribute to the prediction of trouble
+sleeping likelihood
+</p>
+
+#### Model Accuracy
+
+``` r
+predicted <- predict(logit_model, type = "response")
+predicted_binary <- ifelse(predicted > 0.5, 1, 0)
+confusion <- table(predicted_binary, social_media$Trouble_falling_asleep)
+accuracy <- sum(diag(confusion)) / sum(confusion)
+print(accuracy)
+```
+
+    ## [1] 0.8095238
+
+<p>
+The code reads a dataset from an Excel file, preprocesses it to create a
+binary outcome variables, fits a logistic regression model to predict
+this outcome using three predictor variables, conducts residual
+analysis, evaluates model performance using ROC curve and calculates
+AUC, makes predictions for a subset of the data, and assesses model
+accuracy metrics including accuracy and precision.
+</p>
