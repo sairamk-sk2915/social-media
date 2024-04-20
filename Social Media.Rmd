@@ -392,6 +392,7 @@ library(pROC)
 social_media <- read_excel("social_media_cleaned.xlsx")
 social_media_numeric <- select_if(social_media, is.numeric)
 ```
+<<<<<<< HEAD
 <p>A logistic regression model is created to estimate the probability of encountering sleep difficulties using Instagram, WhatsApp, OTT, and YouTube usage as predictors.</p>
 ```{r}
 Instagram_lab <- cut(social_media$Instagram, breaks = c(-Inf, 6, Inf), labels = c("Low Usage", "High Usage"))
@@ -405,6 +406,15 @@ tfs_table <- xtabs(~ Trouble_falling_asleep + combined_lab, data=social_media)
 tfs_table
 
 logit_model <- glm(Trouble_falling_asleep ~  Instagram + `Whatsapp/Wechat` + OTT + youtube, data = social_media, 
+=======
+
+```{r}
+threshold <- 200
+
+social_media$tfs_Binary <- ifelse(social_media$Trouble_falling_asleep > threshold, 1, 0)
+
+logit_model <- glm(tfs_Binary ~  Instagram + LinkedIn + SnapChat + Twitter + youtube + OTT + `Whatsapp/Wechat`, data = social_media, 
+>>>>>>> 166c0f325e31348f29b9418bdba6529b44343ece
                     family = binomial)
 
 ```
@@ -435,6 +445,7 @@ plot(logit_model)
 <p>Plot() function generates diagnostic plots for the logistic regression model (logit_model).diagnostic plots including residuals vs. fitted values, quantile-quantile (Q-Q) plot, and leverage plot  </p>
 
 #### Prediction
+<<<<<<< HEAD
 ```{r}
 predicted.social_media <- data.frame(probability.of.hd=logit_model$fitted.values,Instagram=Instagram_lab)
 predicted.social_media
@@ -488,15 +499,29 @@ legend("bottomright", legend=c("Simple", "Non Simple"), col=c("#377eb8", "#4daf4
 <p>The logistic regression model estimates the likelihood of experiencing trouble sleeping based on various predictors, including social media usage and user characteristics. However, due to singularities in the data, some coefficients are not defined. The model suggests that characteristics such as "character19!\@s" and "characterpeace" have negligible impact on the likelihood of trouble sleeping, as indicated by their small coefficients close to zero.</p>
 <p>For example, individuals with usernames like "masinl", "peace", and "tl868", who spend more time on Instagram, are predicted to have a higher probability (0.75) of experiencing trouble sleeping. Conversely, individuals such as "Patty" and "Bunny", who spend less time on Twitter, are predicted to have a lower probability (0.235) of experiencing trouble sleeping. However, it's important to note that the model coefficients for specific social media platforms like Instagram, LinkedIn, Snapchat, and others are not defined, suggesting that these variables may not significantly contribute to the prediction of trouble sleeping likelihood</p>
 
+=======
+```{r}s
+
+```
+
+>>>>>>> 166c0f325e31348f29b9418bdba6529b44343ece
 #### Model Accuracy
 ```{r}
 predicted <- predict(logit_model, type = "response")
 predicted_binary <- ifelse(predicted > 0.5, 1, 0)
+<<<<<<< HEAD
 confusion <- table(predicted_binary, social_media$Trouble_falling_asleep)
 accuracy <- sum(diag(confusion)) / sum(confusion)
 print(accuracy)
 ```
 
 <p>The code reads a dataset from an Excel file, preprocesses it to create a binary outcome variables, fits a logistic regression model to predict this outcome using three predictor variables, conducts residual analysis, evaluates model performance using ROC curve and calculates AUC, makes predictions for a subset of the data, and assesses model accuracy metrics including accuracy and precision.</p>
+=======
+confusion <- table(predicted_binary, social_media$tfs_Binary)
+accuracy <- sum(diag(confusion)) / sum(confusion)
+print(accuracy)
+```
+<p>The code reads a dataset from an Excel file, preprocesses it to create a binary outcome variable based on a threshold, fits a logistic regression model to predict this outcome using three predictor variables, conducts residual analysis, evaluates model performance using ROC curve and calculates AUC, makes predictions for a subset of the data, and assesses model accuracy metrics including accuracy and precision.</p>
+>>>>>>> 166c0f325e31348f29b9418bdba6529b44343ece
 
 
