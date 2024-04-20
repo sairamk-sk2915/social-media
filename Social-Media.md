@@ -142,7 +142,7 @@ fviz_pca_ind(pca_result,
              palette = c("#00AFBB", "#E7B800", "#FC4E07"),
              addEllipses = TRUE, # Concentration ellipses
              legend.title = "Groups"
-             )
+)
 ```
 
 ![](Social-Media_files/figure-gfm/unnamed-chunk-1-6.png)<!-- -->
@@ -188,7 +188,7 @@ fviz_pca_ind(pca_result,
              palette = c("#00AFBB", "#E7B800", "#FC4E07"),
              addEllipses = TRUE, # Concentration ellipses
              legend.title = "Groups"
-             )
+)
 ```
 
 ![](Social-Media_files/figure-gfm/unnamed-chunk-1-12.png)<!-- -->
@@ -465,7 +465,7 @@ understand how data points group together based on the Whatsapp and
 Youtube, with each group represented by a different color on the plot.
 </p>
 
-### Factor Analysis
+\### Factor Analysis
 
 ``` r
 library(ggplot2)
@@ -926,7 +926,7 @@ patterns and structures, and derive meaningful insights for
 decision-making and further analysis
 </p>
 
-#### Multiple Regression Analysis
+\#### Multiple Regression Analysis
 
 ``` r
 library(dplyr)
@@ -971,7 +971,7 @@ social_media_numeric <- select_if(social_media, is.numeric)
 
 ``` r
 model <- lm(social_media_numeric$Trouble_falling_asleep  ~ social_media_numeric$Instagram + social_media_numeric$LinkedIn + social_media_numeric$SnapChat + social_media_numeric$Twitter + social_media_numeric$`Whatsapp/Wechat` + social_media_numeric$youtube + social_media_numeric$OTT + social_media_numeric$Reddit,
-  data = social_media_numeric
+            data = social_media_numeric
 )
 summary(model)
 ```
@@ -1022,7 +1022,7 @@ sleep. In simpler terms, it means that the variable likely has a genuine
 impact on sleep issues.
 </p>
 
-#### Model Acceptance
+\#### Model Acceptance
 
 ``` r
 coefficients(model)
@@ -1070,6 +1070,7 @@ fitted(model)
 #### Residual Analysis
 
 ``` r
+library(car)
 residuals(model)
 ```
 
@@ -1184,9 +1185,7 @@ model adequately captures the underlying relationships in the data or if
 there are issues that need to be addressed. The plot shows a pattern of
 points around zero, the model is not appropriate.
 </p>
-
-#### Prediction
-
+\#### Prediction
 <p>
 The predict() function will generate predicted values of the dependent
 variable (Trouble_falling_asleep) based on the provided predictors.
@@ -1304,7 +1303,6 @@ social_media <- read_excel("social_media_cleaned.xlsx")
 social_media_numeric <- select_if(social_media, is.numeric)
 ```
 
-<<<<<<< HEAD
 <p>
 A logistic regression model is created to estimate the probability of
 encountering sleep difficulties using Instagram, WhatsApp, OTT, and
@@ -1358,15 +1356,7 @@ tfs_table
 
 ``` r
 logit_model <- glm(Trouble_falling_asleep ~  Instagram + `Whatsapp/Wechat` + OTT + youtube, data = social_media, 
-=======
-``` r
-threshold <- 200
-
-social_media$tfs_Binary <- ifelse(social_media$Trouble_falling_asleep > threshold, 1, 0)
-
-logit_model <- glm(tfs_Binary ~  Instagram + LinkedIn + SnapChat + Twitter + youtube + OTT + `Whatsapp/Wechat`, data = social_media, 
->>>>>>> 166c0f325e31348f29b9418bdba6529b44343ece
-                    family = binomial)
+                   family = binomial)
 ```
 
 <p>
@@ -1391,7 +1381,6 @@ summary(logit_model)
 
     ## 
     ## Call:
-<<<<<<< HEAD
     ## glm(formula = Trouble_falling_asleep ~ Instagram + `Whatsapp/Wechat` + 
     ##     OTT + youtube, family = binomial, data = social_media)
     ## 
@@ -1412,30 +1401,6 @@ summary(logit_model)
     ## AIC: 26.122
     ## 
     ## Number of Fisher Scoring iterations: 6
-=======
-    ## glm(formula = tfs_Binary ~ Instagram + LinkedIn + SnapChat + 
-    ##     Twitter + youtube + OTT + `Whatsapp/Wechat`, family = binomial, 
-    ##     data = social_media)
-    ## 
-    ## Coefficients:
-    ##                     Estimate Std. Error z value Pr(>|z|)
-    ## (Intercept)       -2.557e+01  1.724e+05       0        1
-    ## Instagram         -1.142e-15  1.685e+04       0        1
-    ## LinkedIn          -3.004e-15  2.275e+04       0        1
-    ## SnapChat          -4.596e-16  1.639e+04       0        1
-    ## Twitter           -7.076e-16  7.070e+04       0        1
-    ## youtube            2.353e-15  3.578e+04       0        1
-    ## OTT                3.847e-16  2.331e+04       0        1
-    ## `Whatsapp/Wechat` -9.476e-18  1.743e+04       0        1
-    ## 
-    ## (Dispersion parameter for binomial family taken to be 1)
-    ## 
-    ##     Null deviance: 0.0000e+00  on 20  degrees of freedom
-    ## Residual deviance: 3.3117e-10  on 13  degrees of freedom
-    ## AIC: 16
-    ## 
-    ## Number of Fisher Scoring iterations: 24
->>>>>>> 166c0f325e31348f29b9418bdba6529b44343ece
 
 ``` r
 anova(logit_model)
@@ -1445,32 +1410,17 @@ anova(logit_model)
     ## 
     ## Model: binomial, link: logit
     ## 
-<<<<<<< HEAD
     ## Response: Trouble_falling_asleep
-=======
-    ## Response: tfs_Binary
->>>>>>> 166c0f325e31348f29b9418bdba6529b44343ece
     ## 
     ## Terms added sequentially (first to last)
     ## 
     ## 
     ##                   Df Deviance Resid. Df Resid. Dev
-<<<<<<< HEAD
     ## NULL                                 20     26.734
     ## Instagram          1   5.9366        19     20.797
     ## `Whatsapp/Wechat`  1   3.3483        18     17.449
     ## OTT                1   0.6339        17     16.815
     ## youtube            1   0.6927        16     16.122
-=======
-    ## NULL                                 20 0.0000e+00
-    ## Instagram          1        0        19 3.3117e-10
-    ## LinkedIn           1        0        18 3.3117e-10
-    ## SnapChat           1        0        17 3.3117e-10
-    ## Twitter            1        0        16 3.3117e-10
-    ## youtube            1        0        15 3.3117e-10
-    ## OTT                1        0        14 3.3117e-10
-    ## `Whatsapp/Wechat`  1        0        13 3.3117e-10
->>>>>>> 166c0f325e31348f29b9418bdba6529b44343ece
 
 <p>
 The coefficients represent the estimated effect of each predictor
@@ -1495,7 +1445,6 @@ The coefficients for Conversion_Rate and Avg_Session_Duration are
 residuals(logit_model)
 ```
 
-<<<<<<< HEAD
     ##           1           2           3           4           5           6 
     ## -0.18566301  0.75119378 -0.14561863 -0.73897415  0.08032908 -0.01458191 
     ##           7           8           9          10          11          12 
@@ -1504,18 +1453,6 @@ residuals(logit_model)
     ##  1.10255495 -1.27161868 -0.34050877  1.37328298 -0.93695033 -1.16612969 
     ##          19          20          21 
     ## -0.28016130  0.66281236 -0.06369927
-=======
-    ##             1             2             3             4             5 
-    ## -3.971152e-06 -3.971152e-06 -3.971152e-06 -3.971152e-06 -3.971152e-06 
-    ##             6             7             8             9            10 
-    ## -3.971152e-06 -3.971152e-06 -3.971152e-06 -3.971152e-06 -3.971152e-06 
-    ##            11            12            13            14            15 
-    ## -3.971152e-06 -3.971152e-06 -3.971152e-06 -3.971152e-06 -3.971152e-06 
-    ##            16            17            18            19            20 
-    ## -3.971152e-06 -3.971152e-06 -3.971152e-06 -3.971152e-06 -3.971152e-06 
-    ##            21 
-    ## -3.971152e-06
->>>>>>> 166c0f325e31348f29b9418bdba6529b44343ece
 
 ``` r
 plot(logit_model)
@@ -1534,7 +1471,6 @@ values, quantile-quantile (Q-Q) plot, and leverage plot
 
 #### Prediction
 
-<<<<<<< HEAD
 ``` r
 predicted.social_media <- data.frame(probability.of.hd=logit_model$fitted.values,Instagram=Instagram_lab)
 predicted.social_media
@@ -1793,27 +1729,4 @@ this outcome using three predictor variables, conducts residual
 analysis, evaluates model performance using ROC curve and calculates
 AUC, makes predictions for a subset of the data, and assesses model
 accuracy metrics including accuracy and precision.
-=======
-\`\`\`{r}s
-
-
-    #### Model Accuracy
-
-    ```r
-    predicted <- predict(logit_model, type = "response")
-    predicted_binary <- ifelse(predicted > 0.5, 1, 0)
-    confusion <- table(predicted_binary, social_media$tfs_Binary)
-    accuracy <- sum(diag(confusion)) / sum(confusion)
-    print(accuracy)
-
-    ## [1] 1
-
-<p>
-The code reads a dataset from an Excel file, preprocesses it to create a
-binary outcome variable based on a threshold, fits a logistic regression
-model to predict this outcome using three predictor variables, conducts
-residual analysis, evaluates model performance using ROC curve and
-calculates AUC, makes predictions for a subset of the data, and assesses
-model accuracy metrics including accuracy and precision.
->>>>>>> 166c0f325e31348f29b9418bdba6529b44343ece
 </p>
