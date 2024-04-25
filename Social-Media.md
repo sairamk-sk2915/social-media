@@ -1730,3 +1730,216 @@ analysis, evaluates model performance using ROC curve and calculates
 AUC, makes predictions for a subset of the data, and assesses model
 accuracy metrics including accuracy and precision.
 </p>
+
+### Discriminant Analysis
+
+``` r
+library(MASS)
+library(readxl)
+library(ROCR)
+
+mydata <- read_excel("social_media_cleaned.xlsx")
+mydata$Binary_tfs <- ifelse(mydata$Trouble_falling_asleep == "1", 1, 0)
+```
+
+#### Model Development
+
+``` r
+lda_model <- lda(Binary_tfs ~ Instagram +   LinkedIn + SnapChat + Twitter + `Whatsapp/Wechat` + youtube +   OTT +   Reddit, data = mydata)
+```
+
+#### Model Acceptance
+
+``` r
+summary(lda_model)
+```
+
+    ##         Length Class  Mode     
+    ## prior    2     -none- numeric  
+    ## counts   2     -none- numeric  
+    ## means   16     -none- numeric  
+    ## scaling  8     -none- numeric  
+    ## lev      2     -none- character
+    ## svd      1     -none- numeric  
+    ## N        1     -none- numeric  
+    ## call     3     -none- call     
+    ## terms    3     terms  call     
+    ## xlevels  0     -none- list
+
+``` r
+print(lda_model)
+```
+
+    ## Call:
+    ## lda(Binary_tfs ~ Instagram + LinkedIn + SnapChat + Twitter + 
+    ##     `Whatsapp/Wechat` + youtube + OTT + Reddit, data = mydata)
+    ## 
+    ## Prior probabilities of groups:
+    ##         0         1 
+    ## 0.6666667 0.3333333 
+    ## 
+    ## Group means:
+    ##   Instagram LinkedIn  SnapChat   Twitter `Whatsapp/Wechat`  youtube      OTT
+    ## 0  4.696429 3.836905 0.8392857 0.6500000          6.604762 2.926190 2.361905
+    ## 1  8.376190 3.198095 4.2428571 0.4404762          6.079048 3.065238 2.358571
+    ##      Reddit
+    ## 0 0.6785714
+    ## 1 0.2157143
+    ## 
+    ## Coefficients of linear discriminants:
+    ##                           LD1
+    ## Instagram          0.28281168
+    ## LinkedIn          -0.11485929
+    ## SnapChat           0.23104580
+    ## Twitter            0.15401514
+    ## `Whatsapp/Wechat` -0.11793471
+    ## youtube            0.16244843
+    ## OTT               -0.10662432
+    ## Reddit            -0.09602332
+
+#### Residual Analysis
+
+``` r
+plot(lda_model)
+```
+
+![](Social-Media_files/figure-gfm/unnamed-chunk-30-1.png)<!-- -->
+
+#### Prediction
+
+``` r
+lda_predictions <- predict(lda_model, newdata = mydata)
+lda_predictions
+```
+
+    ## $class
+    ##  [1] 0 1 0 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 0
+    ## Levels: 0 1
+    ## 
+    ## $posterior
+    ##              0           1
+    ## 1  0.976834863 0.023165137
+    ## 2  0.188390685 0.811609315
+    ## 3  0.994420116 0.005579884
+    ## 4  0.917812437 0.082187563
+    ## 5  0.054533293 0.945466707
+    ## 6  0.993792292 0.006207708
+    ## 7  0.894233002 0.105766998
+    ## 8  0.849823061 0.150176939
+    ## 9  0.559002014 0.440997986
+    ## 10 0.951511087 0.048488913
+    ## 11 0.664691181 0.335308819
+    ## 12 0.863631008 0.136368992
+    ## 13 0.008037163 0.991962837
+    ## 14 0.632968941 0.367031059
+    ## 15 0.974761902 0.025238098
+    ## 16 0.662276600 0.337723400
+    ## 17 0.675011651 0.324988349
+    ## 18 0.809775601 0.190224399
+    ## 19 0.873864201 0.126135799
+    ## 20 0.044121353 0.955878647
+    ## 21 0.996711313 0.003288687
+    ## 
+    ## $x
+    ##            LD1
+    ## 1  -1.19320328
+    ## 2   1.41106900
+    ## 3  -1.91474761
+    ## 4  -0.52804920
+    ## 5   2.10810509
+    ## 6  -1.86105421
+    ## 7  -0.38874810
+    ## 8  -0.18774519
+    ## 9   0.56122200
+    ## 10 -0.81025811
+    ## 11  0.33736914
+    ## 12 -0.24409778
+    ## 13  3.09067868
+    ## 14  0.40710233
+    ## 15 -1.14923415
+    ## 16  0.34278302
+    ## 17  0.31400553
+    ## 18 -0.04524018
+    ## 19 -0.28904512
+    ## 20  2.21965151
+    ## 21 -2.18056336
+
+``` r
+predicted_classes <- lda_predictions$class
+predicted_classes
+```
+
+    ##  [1] 0 1 0 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 0
+    ## Levels: 0 1
+
+``` r
+lda_predictions$x
+```
+
+    ##            LD1
+    ## 1  -1.19320328
+    ## 2   1.41106900
+    ## 3  -1.91474761
+    ## 4  -0.52804920
+    ## 5   2.10810509
+    ## 6  -1.86105421
+    ## 7  -0.38874810
+    ## 8  -0.18774519
+    ## 9   0.56122200
+    ## 10 -0.81025811
+    ## 11  0.33736914
+    ## 12 -0.24409778
+    ## 13  3.09067868
+    ## 14  0.40710233
+    ## 15 -1.14923415
+    ## 16  0.34278302
+    ## 17  0.31400553
+    ## 18 -0.04524018
+    ## 19 -0.28904512
+    ## 20  2.21965151
+    ## 21 -2.18056336
+
+``` r
+predicted_probabilities <- as.data.frame(lda_predictions$posterior)
+predicted_probabilities
+```
+
+    ##              0           1
+    ## 1  0.976834863 0.023165137
+    ## 2  0.188390685 0.811609315
+    ## 3  0.994420116 0.005579884
+    ## 4  0.917812437 0.082187563
+    ## 5  0.054533293 0.945466707
+    ## 6  0.993792292 0.006207708
+    ## 7  0.894233002 0.105766998
+    ## 8  0.849823061 0.150176939
+    ## 9  0.559002014 0.440997986
+    ## 10 0.951511087 0.048488913
+    ## 11 0.664691181 0.335308819
+    ## 12 0.863631008 0.136368992
+    ## 13 0.008037163 0.991962837
+    ## 14 0.632968941 0.367031059
+    ## 15 0.974761902 0.025238098
+    ## 16 0.662276600 0.337723400
+    ## 17 0.675011651 0.324988349
+    ## 18 0.809775601 0.190224399
+    ## 19 0.873864201 0.126135799
+    ## 20 0.044121353 0.955878647
+    ## 21 0.996711313 0.003288687
+
+``` r
+pred <- prediction(predicted_probabilities[,2], mydata$Binary_tfs)
+```
+
+#### Model Accuracy
+
+``` r
+roc.perf = performance(pred, measure = "tpr", x.measure = "fpr")
+auc.train <- performance(pred, measure = "auc")
+auc.train <- auc.train@y.values
+plot(roc.perf, main = "ROC Curve", col = "blue", lwd = 2)
+abline(a = 0, b = 1, lty = 2, col = "red")
+text(x = .25, y = .65 ,paste("AUC = ", round(auc.train[[1]],3), sep = ""))
+```
+
+![](Social-Media_files/figure-gfm/unnamed-chunk-32-1.png)<!-- -->

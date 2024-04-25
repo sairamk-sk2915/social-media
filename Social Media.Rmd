@@ -501,4 +501,57 @@ print(accuracy)
 <p>The code reads a dataset from an Excel file, preprocesses it to create a binary outcome variables, fits a logistic regression model to predict this outcome using three predictor variables, conducts residual analysis, evaluates model performance using ROC curve and calculates AUC, makes predictions for a subset of the data, and assesses model accuracy metrics including accuracy and precision.</p>
   
   
-  
+### Discriminant Analysis
+
+```{r}
+library(MASS)
+library(readxl)
+library(ROCR)
+
+mydata <- read_excel("social_media_cleaned.xlsx")
+mydata$Binary_tfs <- ifelse(mydata$Trouble_falling_asleep == "1", 1, 0)
+```
+
+#### Model Development
+
+```{r}
+lda_model <- lda(Binary_tfs ~ Instagram +	LinkedIn + SnapChat + Twitter +	`Whatsapp/Wechat` +	youtube +	OTT +	Reddit, data = mydata)
+```
+
+#### Model Acceptance
+
+```{r}
+summary(lda_model)
+print(lda_model)
+```
+
+#### Residual Analysis
+
+```{r}
+plot(lda_model)
+```
+
+#### Prediction
+```{r}
+lda_predictions <- predict(lda_model, newdata = mydata)
+lda_predictions
+
+predicted_classes <- lda_predictions$class
+predicted_classes
+lda_predictions$x
+
+predicted_probabilities <- as.data.frame(lda_predictions$posterior)
+predicted_probabilities
+pred <- prediction(predicted_probabilities[,2], mydata$Binary_tfs)
+```
+
+#### Model Accuracy
+
+```{r}
+roc.perf = performance(pred, measure = "tpr", x.measure = "fpr")
+auc.train <- performance(pred, measure = "auc")
+auc.train <- auc.train@y.values
+plot(roc.perf, main = "ROC Curve", col = "blue", lwd = 2)
+abline(a = 0, b = 1, lty = 2, col = "red")
+text(x = .25, y = .65 ,paste("AUC = ", round(auc.train[[1]],3), sep = ""))
+```
