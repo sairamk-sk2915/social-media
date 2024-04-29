@@ -1,7 +1,87 @@
-Social Media
+Social Media Data Analysis
 ================
 Satya Shiva Sai Ram Kamma
 2024-03-25
+
+<center>
+
+### <u>Social Media Data Analysis</u>
+
+</center>
+
+#### Project Overview:
+
+<p>
+This project looks at how using social media affects our mood,
+productivity, and sleep. We’re analyzing data to see if there’s a
+connection between how much time people spend on platforms like
+Instagram or Twitter and how they feel or how well they sleep. The goal
+is to find out if certain online habits are linked to feeling better or
+worse, and what we can learn from that.
+</p>
+
+#### Data Collection
+
+<p>
+The variables included in this dataset
+</p>
+
+- character
+- Instagram
+- LinkedIn
+- SnapChat
+- Twitter
+- Whatsapp/Wechat
+- youtube
+- OTT
+- Reddit
+- Trouble_falling_asleep
+- Mood Productivity
+- Tired waking up in morning
+- How you felt the entire week?
+
+#### Dependent Variables
+
+    - Mood Productivity
+    - Trouble falling asleep
+
+#### Independent Variables
+
+    - Instagram
+    - LinkedIn
+    - SnapChat
+    - Twitter
+    - Whatsapp/Wechat
+    - youtube
+    - OTT
+    - Reddit
+
+#### Data Dictionary
+
+- <b>character:</b> Name or identifier of the individual/person.
+- <b>Instagram:</b> Activity level on Instagram (e.g., time spent,
+  interactions).
+- <b>LinkedIn:</b> Activity level on LinkedIn.
+- <b>SnapChat:</b> Activity level on Snapchat.
+- <b>Twitter:</b> Activity level on Twitter.
+- <b>Whatsapp/Wechat:</b> Activity level on WhatsApp or WeChat.
+- <b>youtube:</b> Activity level on YouTube.
+- <b>OTT:</b> Activity level on Over-the-Top platforms (e.g., Netflix,
+  Hulu).
+- <b>Reddit:</b> Activity level on Reddit.
+- <b>Trouble_falling_asleep:</b> A measure indicating if the individual
+  experiences trouble falling asleep, possibly rated on a scale (e.g., 0
+  for no trouble, 1 for some trouble).
+- <b>Mood Productivity:</b> The individual’s mood, possibly rated on a
+  scale (e.g., 1 to 5, with 5 being very positive).
+- <b>Tired waking up in morning:</b> A measure indicating how tired the
+  individual feels upon waking up in the morning, possibly rated on a
+  scale (e.g., 0 for not tired, 1 for somewhat tired).
+- <b>How you felt the entire week?:</b> An overall measure of how the
+  individual felt throughout the entire week, possibly rated on a scale
+  (e.g., 1 to 5, with 5 being very positive).
+
+#### Data Collection
 
 ``` r
 library(readxl)
@@ -41,10 +121,538 @@ library(factoextra)
     ## Welcome! Want to learn more? See two factoextra-related books at https://goo.gl/ve3WBa
 
 ``` r
-social_media <- read_excel("social_media_cleaned.xlsx")
+library(ggplot2)
+library(ggfortify)
+```
 
+    ## Warning: package 'ggfortify' was built under R version 4.3.3
+
+``` r
+library(MASS)
+```
+
+    ## 
+    ## Attaching package: 'MASS'
+
+    ## The following object is masked from 'package:dplyr':
+    ## 
+    ##     select
+
+``` r
+library(ggrepel)
+```
+
+    ## Warning: package 'ggrepel' was built under R version 4.3.2
+
+``` r
+library(stats)
+library(scatterplot3d)
+library(cluster)
+library(psych)
+```
+
+    ## Warning: package 'psych' was built under R version 4.3.3
+
+    ## 
+    ## Attaching package: 'psych'
+
+    ## The following objects are masked from 'package:ggplot2':
+    ## 
+    ##     %+%, alpha
+
+``` r
+library(car)
+```
+
+    ## Warning: package 'car' was built under R version 4.3.2
+
+    ## Loading required package: carData
+
+    ## Warning: package 'carData' was built under R version 4.3.2
+
+    ## 
+    ## Attaching package: 'car'
+
+    ## The following object is masked from 'package:psych':
+    ## 
+    ##     logit
+
+    ## The following object is masked from 'package:dplyr':
+    ## 
+    ##     recode
+
+``` r
+library(GGally)
+```
+
+    ## Warning: package 'GGally' was built under R version 4.3.2
+
+    ## Registered S3 method overwritten by 'GGally':
+    ##   method from   
+    ##   +.gg   ggplot2
+
+``` r
+library(ROCR)
+```
+
+    ## Warning: package 'ROCR' was built under R version 4.3.3
+
+``` r
+library(pROC)
+```
+
+    ## Type 'citation("pROC")' for a citation.
+
+    ## 
+    ## Attaching package: 'pROC'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     cov, smooth, var
+
+``` r
+library(DataExplorer)
+```
+
+    ## Warning: package 'DataExplorer' was built under R version 4.3.3
+
+``` r
+social_media <- read_excel("social_media_cleaned.xlsx")
 social_media_numeric <- select_if(social_media, is.numeric)
 
+print(social_media)
+```
+
+    ## # A tibble: 21 × 13
+    ##    character Instagram LinkedIn SnapChat Twitter `Whatsapp/Wechat` youtube   OTT
+    ##    <chr>         <dbl>    <dbl>    <dbl>   <dbl>             <dbl>   <dbl> <dbl>
+    ##  1 masinl        3.5      4        1       5                  1       2.5   14.5
+    ##  2 peace         7.73     5.2      3.68    0                  4.18    4.25   0  
+    ##  3 Patty         3.77     7        0.533   0                  9.83    1.85   2  
+    ##  4 Bunny         5.38     5.32     1.3     0                  5.3     2      2  
+    ##  5 tl868        12        0.583    0       0.667              3       3.5    2  
+    ##  6 drphy         2.33     7        0.467   0                 12       7      3  
+    ##  7 trave         5.37     4        0       0                  6       3      0  
+    ##  8 19!@s         7        4        3       0                 10       2      3  
+    ##  9 yh2020        8.65    10        3.83    0                  6.15    4      3  
+    ## 10 ds2134        0.167    0        0       0                  1       3      0  
+    ## # ℹ 11 more rows
+    ## # ℹ 5 more variables: Reddit <dbl>, Trouble_falling_asleep <dbl>,
+    ## #   `Mood Productivity` <dbl>, `Tired waking up in morning` <dbl>,
+    ## #   `How you felt the entire week?` <dbl>
+
+``` r
+head(social_media)
+```
+
+    ## # A tibble: 6 × 13
+    ##   character Instagram LinkedIn SnapChat Twitter `Whatsapp/Wechat` youtube   OTT
+    ##   <chr>         <dbl>    <dbl>    <dbl>   <dbl>             <dbl>   <dbl> <dbl>
+    ## 1 masinl         3.5     4        1       5                  1       2.5   14.5
+    ## 2 peace          7.73    5.2      3.68    0                  4.18    4.25   0  
+    ## 3 Patty          3.77    7        0.533   0                  9.83    1.85   2  
+    ## 4 Bunny          5.38    5.32     1.3     0                  5.3     2      2  
+    ## 5 tl868         12       0.583    0       0.667              3       3.5    2  
+    ## 6 drphy          2.33    7        0.467   0                 12       7      3  
+    ## # ℹ 5 more variables: Reddit <dbl>, Trouble_falling_asleep <dbl>,
+    ## #   `Mood Productivity` <dbl>, `Tired waking up in morning` <dbl>,
+    ## #   `How you felt the entire week?` <dbl>
+
+``` r
+summary(social_media)
+```
+
+    ##   character           Instagram          LinkedIn         SnapChat      
+    ##  Length:21          Min.   : 0.1667   Min.   : 0.000   Min.   : 0.0000  
+    ##  Class :character   1st Qu.: 3.7667   1st Qu.: 1.917   1st Qu.: 0.0000  
+    ##  Mode  :character   Median : 5.3833   Median : 3.917   Median : 0.5333  
+    ##                     Mean   : 5.9230   Mean   : 3.624   Mean   : 1.9738  
+    ##                     3rd Qu.: 7.0000   3rd Qu.: 5.000   3rd Qu.: 1.8667  
+    ##                     Max.   :15.0167   Max.   :10.000   Max.   :14.8667  
+    ##     Twitter       Whatsapp/Wechat     youtube           OTT        
+    ##  Min.   :0.0000   Min.   : 1.000   Min.   :0.000   Min.   : 0.000  
+    ##  1st Qu.:0.0000   1st Qu.: 3.667   1st Qu.:2.000   1st Qu.: 0.000  
+    ##  Median :0.0000   Median : 6.000   Median :3.000   Median : 1.683  
+    ##  Mean   :0.5802   Mean   : 6.430   Mean   :2.973   Mean   : 2.361  
+    ##  3rd Qu.:0.2667   3rd Qu.: 8.917   3rd Qu.:4.000   3rd Qu.: 2.467  
+    ##  Max.   :5.0000   Max.   :15.350   Max.   :7.000   Max.   :14.500  
+    ##      Reddit       Trouble_falling_asleep Mood Productivity
+    ##  Min.   :0.0000   Min.   :0.0000         Min.   :0.0000   
+    ##  1st Qu.:0.0000   1st Qu.:0.0000         1st Qu.:1.0000   
+    ##  Median :0.0000   Median :0.0000         Median :1.0000   
+    ##  Mean   :0.5243   Mean   :0.3333         Mean   :0.9524   
+    ##  3rd Qu.:0.0000   3rd Qu.:1.0000         3rd Qu.:1.0000   
+    ##  Max.   :7.0000   Max.   :1.0000         Max.   :1.0000   
+    ##  Tired waking up in morning How you felt the entire week?
+    ##  Min.   :0.0000             Min.   :2.000                
+    ##  1st Qu.:0.0000             1st Qu.:3.000                
+    ##  Median :0.0000             Median :3.000                
+    ##  Mean   :0.3333             Mean   :3.429                
+    ##  3rd Qu.:1.0000             3rd Qu.:4.000                
+    ##  Max.   :1.0000             Max.   :5.000
+
+``` r
+str(social_media)
+```
+
+    ## tibble [21 × 13] (S3: tbl_df/tbl/data.frame)
+    ##  $ character                    : chr [1:21] "masinl" "peace" "Patty" "Bunny" ...
+    ##  $ Instagram                    : num [1:21] 3.5 7.73 3.77 5.38 12 ...
+    ##  $ LinkedIn                     : num [1:21] 4 5.2 7 5.317 0.583 ...
+    ##  $ SnapChat                     : num [1:21] 1 3.683 0.533 1.3 0 ...
+    ##  $ Twitter                      : num [1:21] 5 0 0 0 0.667 ...
+    ##  $ Whatsapp/Wechat              : num [1:21] 1 4.18 9.83 5.3 3 ...
+    ##  $ youtube                      : num [1:21] 2.5 4.25 1.85 2 3.5 7 3 2 4 3 ...
+    ##  $ OTT                          : num [1:21] 14.5 0 2 2 2 3 0 3 3 0 ...
+    ##  $ Reddit                       : num [1:21] 2.5 0 0 0 1 0 0 0 0 0 ...
+    ##  $ Trouble_falling_asleep       : num [1:21] 0 1 0 0 1 0 0 1 0 0 ...
+    ##  $ Mood Productivity            : num [1:21] 1 1 1 1 1 1 1 1 1 0 ...
+    ##  $ Tired waking up in morning   : num [1:21] 0 0 0 0 1 0 1 1 0 0 ...
+    ##  $ How you felt the entire week?: num [1:21] 3 3 4 4 3 5 4 4 3 2 ...
+
+<p>
+Data Cleaning
+</p>
+
+``` r
+is.na(social_media)
+```
+
+    ##       character Instagram LinkedIn SnapChat Twitter Whatsapp/Wechat youtube
+    ##  [1,]     FALSE     FALSE    FALSE    FALSE   FALSE           FALSE   FALSE
+    ##  [2,]     FALSE     FALSE    FALSE    FALSE   FALSE           FALSE   FALSE
+    ##  [3,]     FALSE     FALSE    FALSE    FALSE   FALSE           FALSE   FALSE
+    ##  [4,]     FALSE     FALSE    FALSE    FALSE   FALSE           FALSE   FALSE
+    ##  [5,]     FALSE     FALSE    FALSE    FALSE   FALSE           FALSE   FALSE
+    ##  [6,]     FALSE     FALSE    FALSE    FALSE   FALSE           FALSE   FALSE
+    ##  [7,]     FALSE     FALSE    FALSE    FALSE   FALSE           FALSE   FALSE
+    ##  [8,]     FALSE     FALSE    FALSE    FALSE   FALSE           FALSE   FALSE
+    ##  [9,]     FALSE     FALSE    FALSE    FALSE   FALSE           FALSE   FALSE
+    ## [10,]     FALSE     FALSE    FALSE    FALSE   FALSE           FALSE   FALSE
+    ## [11,]     FALSE     FALSE    FALSE    FALSE   FALSE           FALSE   FALSE
+    ## [12,]     FALSE     FALSE    FALSE    FALSE   FALSE           FALSE   FALSE
+    ## [13,]     FALSE     FALSE    FALSE    FALSE   FALSE           FALSE   FALSE
+    ## [14,]     FALSE     FALSE    FALSE    FALSE   FALSE           FALSE   FALSE
+    ## [15,]     FALSE     FALSE    FALSE    FALSE   FALSE           FALSE   FALSE
+    ## [16,]     FALSE     FALSE    FALSE    FALSE   FALSE           FALSE   FALSE
+    ## [17,]     FALSE     FALSE    FALSE    FALSE   FALSE           FALSE   FALSE
+    ## [18,]     FALSE     FALSE    FALSE    FALSE   FALSE           FALSE   FALSE
+    ## [19,]     FALSE     FALSE    FALSE    FALSE   FALSE           FALSE   FALSE
+    ## [20,]     FALSE     FALSE    FALSE    FALSE   FALSE           FALSE   FALSE
+    ## [21,]     FALSE     FALSE    FALSE    FALSE   FALSE           FALSE   FALSE
+    ##         OTT Reddit Trouble_falling_asleep Mood Productivity
+    ##  [1,] FALSE  FALSE                  FALSE             FALSE
+    ##  [2,] FALSE  FALSE                  FALSE             FALSE
+    ##  [3,] FALSE  FALSE                  FALSE             FALSE
+    ##  [4,] FALSE  FALSE                  FALSE             FALSE
+    ##  [5,] FALSE  FALSE                  FALSE             FALSE
+    ##  [6,] FALSE  FALSE                  FALSE             FALSE
+    ##  [7,] FALSE  FALSE                  FALSE             FALSE
+    ##  [8,] FALSE  FALSE                  FALSE             FALSE
+    ##  [9,] FALSE  FALSE                  FALSE             FALSE
+    ## [10,] FALSE  FALSE                  FALSE             FALSE
+    ## [11,] FALSE  FALSE                  FALSE             FALSE
+    ## [12,] FALSE  FALSE                  FALSE             FALSE
+    ## [13,] FALSE  FALSE                  FALSE             FALSE
+    ## [14,] FALSE  FALSE                  FALSE             FALSE
+    ## [15,] FALSE  FALSE                  FALSE             FALSE
+    ## [16,] FALSE  FALSE                  FALSE             FALSE
+    ## [17,] FALSE  FALSE                  FALSE             FALSE
+    ## [18,] FALSE  FALSE                  FALSE             FALSE
+    ## [19,] FALSE  FALSE                  FALSE             FALSE
+    ## [20,] FALSE  FALSE                  FALSE             FALSE
+    ## [21,] FALSE  FALSE                  FALSE             FALSE
+    ##       Tired waking up in morning How you felt the entire week?
+    ##  [1,]                      FALSE                         FALSE
+    ##  [2,]                      FALSE                         FALSE
+    ##  [3,]                      FALSE                         FALSE
+    ##  [4,]                      FALSE                         FALSE
+    ##  [5,]                      FALSE                         FALSE
+    ##  [6,]                      FALSE                         FALSE
+    ##  [7,]                      FALSE                         FALSE
+    ##  [8,]                      FALSE                         FALSE
+    ##  [9,]                      FALSE                         FALSE
+    ## [10,]                      FALSE                         FALSE
+    ## [11,]                      FALSE                         FALSE
+    ## [12,]                      FALSE                         FALSE
+    ## [13,]                      FALSE                         FALSE
+    ## [14,]                      FALSE                         FALSE
+    ## [15,]                      FALSE                         FALSE
+    ## [16,]                      FALSE                         FALSE
+    ## [17,]                      FALSE                         FALSE
+    ## [18,]                      FALSE                         FALSE
+    ## [19,]                      FALSE                         FALSE
+    ## [20,]                      FALSE                         FALSE
+    ## [21,]                      FALSE                         FALSE
+
+``` r
+sum(is.na(social_media))
+```
+
+    ## [1] 0
+
+#### EDA
+
+<p>
+The create_report() function in R’s DataExplorer package makes it easier
+to explore datasets by creating a detailed report automatically. It
+summarizes numerical and categorical data, finds missing values,
+identifies outliers, and examines relationships between variables. This
+interactive report helps users understand the dataset’s structure,
+distributions, and any data quality concerns, allowing analysts and data
+scientists to gain insights into important patterns and trends quickly.
+</p>
+
+``` r
+describe(social_media)
+```
+
+    ##                               vars  n  mean   sd median trimmed  mad  min   max
+    ## character*                       1 21 11.00 6.20  11.00   11.00 7.41 1.00 21.00
+    ## Instagram                        2 21  5.92 3.52   5.38    5.70 2.40 0.17 15.02
+    ## LinkedIn                         3 21  3.62 2.48   3.92    3.45 2.10 0.00 10.00
+    ## SnapChat                         4 21  1.97 3.47   0.53    1.13 0.79 0.00 14.87
+    ## Twitter                          5 21  0.58 1.29   0.00    0.26 0.00 0.00  5.00
+    ## Whatsapp/Wechat                  6 21  6.43 4.03   6.00    6.14 3.83 1.00 15.35
+    ## youtube                          7 21  2.97 1.74   3.00    2.92 1.48 0.00  7.00
+    ## OTT                              8 21  2.36 3.53   1.68    1.48 1.95 0.00 14.50
+    ## Reddit                           9 21  0.52 1.59   0.00    0.09 0.00 0.00  7.00
+    ## Trouble_falling_asleep          10 21  0.33 0.48   0.00    0.29 0.00 0.00  1.00
+    ## Mood Productivity               11 21  0.95 0.22   1.00    1.00 0.00 0.00  1.00
+    ## Tired waking up in morning      12 21  0.33 0.48   0.00    0.29 0.00 0.00  1.00
+    ## How you felt the entire week?   13 21  3.43 0.75   3.00    3.35 0.00 2.00  5.00
+    ##                               range  skew kurtosis   se
+    ## character*                    20.00  0.00    -1.37 1.35
+    ## Instagram                     14.85  0.66     0.37 0.77
+    ## LinkedIn                      10.00  0.63     0.02 0.54
+    ## SnapChat                      14.87  2.57     6.44 0.76
+    ## Twitter                        5.00  2.24     4.22 0.28
+    ## Whatsapp/Wechat               14.35  0.53    -0.67 0.88
+    ## youtube                        7.00  0.33    -0.47 0.38
+    ## OTT                           14.50  2.32     4.76 0.77
+    ## Reddit                         7.00  3.26    10.14 0.35
+    ## Trouble_falling_asleep         1.00  0.66    -1.64 0.11
+    ## Mood Productivity              1.00 -3.95    14.28 0.05
+    ## Tired waking up in morning     1.00  0.66    -1.64 0.11
+    ## How you felt the entire week?  3.00  0.57    -0.33 0.16
+
+``` r
+create_report(social_media)
+```
+
+    ## 
+    ## 
+    ## processing file: report.rmd
+
+    ##   |                                             |                                     |   0%  |                                             |.                                    |   2%                                   |                                             |..                                   |   5% [global_options]                  |                                             |...                                  |   7%                                   |                                             |....                                 |  10% [introduce]                       |                                             |....                                 |  12%                                   |                                             |.....                                |  14% [plot_intro]                      |                                             |......                               |  17%                                   |                                             |.......                              |  19% [data_structure]                  |                                             |........                             |  21%                                   |                                             |.........                            |  24% [missing_profile]                 |                                             |..........                           |  26%                                   |                                             |...........                          |  29% [univariate_distribution_header]  |                                             |...........                          |  31%                                   |                                             |............                         |  33% [plot_histogram]                  |                                             |.............                        |  36%                                   |                                             |..............                       |  38% [plot_density]                    |                                             |...............                      |  40%                                   |                                             |................                     |  43% [plot_frequency_bar]              |                                             |.................                    |  45%                                   |                                             |..................                   |  48% [plot_response_bar]               |                                             |..................                   |  50%                                   |                                             |...................                  |  52% [plot_with_bar]                   |                                             |....................                 |  55%                                   |                                             |.....................                |  57% [plot_normal_qq]                  |                                             |......................               |  60%                                   |                                             |.......................              |  62% [plot_response_qq]                |                                             |........................             |  64%                                   |                                             |.........................            |  67% [plot_by_qq]                      |                                             |..........................           |  69%                                   |                                             |..........................           |  71% [correlation_analysis]            |                                             |...........................          |  74%                                   |                                             |............................         |  76% [principal_component_analysis]    |                                             |.............................        |  79%                                   |                                             |..............................       |  81% [bivariate_distribution_header]   |                                             |...............................      |  83%                                   |                                             |................................     |  86% [plot_response_boxplot]           |                                             |.................................    |  88%                                   |                                             |.................................    |  90% [plot_by_boxplot]                 |                                             |..................................   |  93%                                   |                                             |...................................  |  95% [plot_response_scatterplot]       |                                             |.................................... |  98%                                   |                                             |.....................................| 100% [plot_by_scatterplot]           
+
+    ## output file: C:/Rutgers/SEM 2/MVA/R Exercise/Socia Media/report.knit.md
+
+    ## "C:/Program Files/RStudio/resources/app/bin/quarto/bin/tools/pandoc" +RTS -K512m -RTS "C:\Rutgers\SEM2~1\MVA\REXERC~1\SOCIAM~1\REPORT~1.MD" --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output pandoc4324de14946.html --lua-filter "C:\Users\saira\AppData\Local\R\win-library\4.3\rmarkdown\rmarkdown\lua\pagebreak.lua" --lua-filter "C:\Users\saira\AppData\Local\R\win-library\4.3\rmarkdown\rmarkdown\lua\latex-div.lua" --embed-resources --standalone --variable bs3=TRUE --section-divs --table-of-contents --toc-depth 6 --template "C:\Users\saira\AppData\Local\R\win-library\4.3\rmarkdown\rmd\h\default.html" --no-highlight --variable highlightjs=1 --variable theme=yeti --mathjax --variable "mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" --include-in-header "C:\Users\saira\AppData\Local\Temp\RtmpeWGS8T\rmarkdown-str4324392172ba.html"
+
+    ## 
+    ## Output created: report.html
+
+[Click here to view Genetated EDA Report File](report.html)
+
+#### Correltion and Coefficient
+
+``` r
+correlation_coefficient <- cor(social_media$Instagram, social_media$Trouble_falling_asleep)
+print(correlation_coefficient)
+```
+
+    ## [1] 0.5053586
+
+``` r
+plot(social_media$Instagram, social_media$Trouble_falling_asleep,
+     xlab = "Instagram", ylab = "Trouble Felling asleep",
+     main = "Scatter Plot of Instagram vs. Trouble Felling asleep")
+
+abline(lm(social_media$Trouble_falling_asleep ~ social_media$Instagram), col = "red")
+```
+
+![](Social-Media_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+``` r
+plot(social_media$`Whatsapp/Wechat`, social_media$Trouble_falling_asleep,
+     xlab = "Whatsapp", ylab = "Trouble Felling asleep",
+     main = "Scatter Plot of Whatsapp vs. Trouble Felling asleep")
+
+abline(lm(social_media$Trouble_falling_asleep ~ social_media$`Whatsapp/Wechat`), col = "red")
+```
+
+![](Social-Media_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->
+
+``` r
+print(paste("Correlation Coefficient between Instagram and Trouble Felling asleep Duration:", correlation_coefficient))
+```
+
+    ## [1] "Correlation Coefficient between Instagram and Trouble Felling asleep Duration: 0.505358558539933"
+
+``` r
+num_vars <- c("Instagram", "LinkedIn", "Whatsapp/Wechat", "Trouble_falling_asleep")
+
+for (var in num_vars) {
+  p <- ggplot(social_media, aes(x = social_media[[var]])) +
+    geom_histogram(fill = "skyblue", color = "black") +
+    labs(title = paste("Histogram of", var), x = var, y = "Frequency") +
+    theme_minimal() +
+    theme(plot.title = element_text(hjust = 0.5))
+  print(p)
+}
+```
+
+    ## Warning: Use of `social_media[[var]]` is discouraged.
+    ## ℹ Use `.data[[var]]` instead.
+
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+
+![](Social-Media_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+    ## Warning: Use of `social_media[[var]]` is discouraged.
+    ## ℹ Use `.data[[var]]` instead.
+
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+
+![](Social-Media_files/figure-gfm/unnamed-chunk-7-2.png)<!-- -->
+
+    ## Warning: Use of `social_media[[var]]` is discouraged.
+    ## ℹ Use `.data[[var]]` instead.
+
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+
+![](Social-Media_files/figure-gfm/unnamed-chunk-7-3.png)<!-- -->
+
+    ## Warning: Use of `social_media[[var]]` is discouraged.
+    ## ℹ Use `.data[[var]]` instead.
+
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+
+![](Social-Media_files/figure-gfm/unnamed-chunk-7-4.png)<!-- -->
+<p>
+<b>What is the overall level of addiction to social media apps among all
+users, and how does it relate to their reported trouble falling
+asleep?</b>
+</p>
+
+``` r
+social_media$Social_Media_Addiction <- rowSums(social_media[, c("Instagram", "LinkedIn" , "Twitter", "Whatsapp/Wechat" , "OTT", "Reddit")])
+
+summary(social_media$Social_Media_Addiction)
+```
+
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    ##   1.167  14.417  18.500  19.442  24.000  44.317
+
+``` r
+summary(social_media$Trouble_falling_asleep)
+```
+
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    ##  0.0000  0.0000  0.0000  0.3333  1.0000  1.0000
+
+``` r
+# Scatter plot of social media addiction vs. trouble falling asleep
+ggplot(social_media, aes(x = Social_Media_Addiction, y = Trouble_falling_asleep)) +
+  geom_point(color = "purple") +
+  labs(title = "Social Media Addiction vs. Trouble Falling Asleep",
+       x = "Social Media Addiction",
+       y = "Trouble Falling Asleep")
+```
+
+![](Social-Media_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+<p>
+<b>How do the levels of addiction to individual social media apps vary
+among users, and is there a relationship between addiction to specific
+apps and reported trouble falling asleep?</b>
+</p>
+
+``` r
+summary(social_media$Instagram)
+```
+
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    ##  0.1667  3.7667  5.3833  5.9230  7.0000 15.0167
+
+``` r
+summary(social_media$`Whatsapp/Wechat`)
+```
+
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    ##   1.000   3.667   6.000   6.430   8.917  15.350
+
+``` r
+ggplot(social_media, aes(x = Instagram, y = Trouble_falling_asleep)) +
+  geom_point(color = "orange") +
+  labs(title = "Instagram Activity vs. Trouble Falling Asleep",
+       x = "Instagram Activity",
+       y = "Trouble Falling Asleep")
+```
+
+![](Social-Media_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
+``` r
+ggplot(social_media, aes(x = `Whatsapp/Wechat`, y = Trouble_falling_asleep)) +
+  geom_point(color = "blue") +
+  labs(title = "Whatsapp Activity vs. Trouble Falling Asleep",
+       x = "Whatsapp Activity",
+       y = "Trouble Falling Asleep")
+```
+
+![](Social-Media_files/figure-gfm/unnamed-chunk-9-2.png)<!-- -->
+
+<p>
+<b>Are there any noticeable trends in the reported mood levels
+throughout the week, and how do these trends correlate with social media
+activity?</b>
+</p>
+
+``` r
+n_rows <- nrow(social_media)
+day_of_week <- factor(1:n_rows)
+unique_days <- unique(day_of_week)
+
+ggplot(social_media, aes(x = day_of_week, y = `Mood Productivity`, group = 1)) +
+  geom_line(color = "green") +
+  labs(title = "Average Mood Levels Throughout the Week",
+       x = "Day of the Week",
+       y = "Average Mood")
+```
+
+![](Social-Media_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+
+``` r
+correlation_matrix <- cor(social_media[, c("Mood Productivity", "Instagram", "LinkedIn", "Twitter", "Whatsapp/Wechat", "youtube", "OTT", "Reddit")])
+
+# Print correlation matrix
+print(correlation_matrix)
+```
+
+    ##                   Mood Productivity   Instagram     LinkedIn    Twitter
+    ## Mood Productivity       1.000000000  0.37498880  0.335447863  0.1029958
+    ## Instagram               0.374988801  1.00000000  0.097056399 -0.1930565
+    ## LinkedIn                0.335447863  0.09705640  1.000000000 -0.1300685
+    ## Twitter                 0.102995756 -0.19305653 -0.130068464  1.0000000
+    ## Whatsapp/Wechat         0.308871917  0.37769615  0.228835623 -0.4958329
+    ## youtube                -0.003621212  0.33000187  0.452197669 -0.1881777
+    ## OTT                     0.153208032  0.26738122  0.185492527  0.5570740
+    ## Reddit                  0.075429291 -0.07461553 -0.006992884  0.1649030
+    ##                   Whatsapp/Wechat      youtube       OTT       Reddit
+    ## Mood Productivity       0.3088719 -0.003621212 0.1532080  0.075429291
+    ## Instagram               0.3776962  0.330001869 0.2673812 -0.074615529
+    ## LinkedIn                0.2288356  0.452197669 0.1854925 -0.006992884
+    ## Twitter                -0.4958329 -0.188177691 0.5570740  0.164902964
+    ## Whatsapp/Wechat         1.0000000  0.371685163 0.1336204 -0.134449660
+    ## youtube                 0.3716852  1.000000000 0.1605652  0.026399913
+    ## OTT                     0.1336204  0.160565234 1.0000000  0.232791099
+    ## Reddit                 -0.1344497  0.026399913 0.2327911  1.000000000
+
+### MVA models
+
+#### PCA
+
+``` r
 # Perform PCA
 pca_result <- prcomp(social_media_numeric, scale = TRUE)
 
@@ -52,7 +660,7 @@ pca_result <- prcomp(social_media_numeric, scale = TRUE)
 plot(pca_result$sdev^2, type = "b", xlab = "Principal Component", ylab = "Variance Explained")
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
 ``` r
 #From PCA variate representation of each PC, It’s evident that PC1 and PC2 add arround 50% of the to total variance
@@ -60,7 +668,7 @@ plot(pca_result$sdev^2, type = "b", xlab = "Principal Component", ylab = "Varian
 plot(pca_result$sdev^2, xlab = "Component number", ylab = "Component variance", type = "l", main = "Scree diagram")
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-1-2.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-11-2.png)<!-- -->
 
 ``` r
 # Loadings
@@ -117,14 +725,14 @@ pairs(data_projection_all, col = "blue", pch = 19,
       main = "Data Visualization using All PCs")
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-1-3.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-11-3.png)<!-- -->
 
 ``` r
 # Visualize Eigenvalues
 fviz_eig(pca_result, addlabels = TRUE)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-1-4.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-11-4.png)<!-- -->
 
 ``` r
 # Visualize Variable Quality
@@ -133,7 +741,7 @@ fviz_pca_var(pca_result, col.var = "cos2",
              repel = TRUE)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-1-5.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-11-5.png)<!-- -->
 
 ``` r
 # Visualize Individual Contributions
@@ -145,41 +753,41 @@ fviz_pca_ind(pca_result,
 )
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-1-6.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-11-6.png)<!-- -->
 
 ``` r
 # Biplot
 biplot(pca_result)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-1-7.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-11-7.png)<!-- -->
 
 ``` r
 # Variable correlation plot (Correlation Circle)
 fviz_pca_var(pca_result, col.var = "black")
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-1-8.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-11-8.png)<!-- -->
 
 ``` r
 # Quality of representation of variables on dimensions 1 and 2
 fviz_cos2(pca_result, choice = "var", axes = 1:2)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-1-9.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-11-9.png)<!-- -->
 
 ``` r
 # Contributions of variables to principal components
 fviz_contrib(pca_result, choice = "var", axes = 1, top = 10)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-1-10.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-11-10.png)<!-- -->
 
 ``` r
 fviz_contrib(pca_result, choice = "var", axes = 2, top = 10)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-1-11.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-11-11.png)<!-- -->
 
 ``` r
 # Visualize individual contributions
@@ -191,48 +799,17 @@ fviz_pca_ind(pca_result,
 )
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-1-12.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-11-12.png)<!-- -->
 
 ``` r
-library(scatterplot3d)
 scatterplot3d(pca_result$x[,1:3], color = social_media$Instagram)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-1-13.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-11-13.png)<!-- -->
 
 ### Cluster Analysis
 
 ``` r
-library(readxl)
-library(factoextra)
-library(ggplot2)
-library(factoextra)
-library(ggfortify)
-```
-
-    ## Warning: package 'ggfortify' was built under R version 4.3.3
-
-``` r
-library(MASS)
-```
-
-    ## 
-    ## Attaching package: 'MASS'
-
-    ## The following object is masked from 'package:dplyr':
-    ## 
-    ##     select
-
-``` r
-library(ggrepel)
-```
-
-    ## Warning: package 'ggrepel' was built under R version 4.3.2
-
-``` r
-library(stats)
-
-
 social_media_cluster <- read_excel("social_media_cleaned.xlsx")
 data.scaled <- scale(x = social_media_cluster[, -1], center = TRUE, scale = TRUE)
 data <- data.scaled
@@ -279,7 +856,7 @@ plot(pc_first_three, col = cluster_colors[km_clusters$cluster],
      xlab = "", ylab = "", pch = 20)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 <p>
 It is first performs Principal Component Analysis (PCA) on scaled data,
 reducing its dimensionality.
@@ -312,7 +889,7 @@ plot(hc, main = "Dendrogram of Hierarchical Clustering (Subset of 20 Rows)",
      xlab = "Sample Index", ylab = "Distance", sub = NULL)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 <p>
 The plot shows the first three principal components, performs
@@ -326,7 +903,7 @@ reduced-dimensional space.
 fviz_cluster(list(data = pc$x[, 1:2], cluster = km_clusters$cluster))
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
 <p>
 This plot visualizes clustering results by plotting data points in a
@@ -372,7 +949,7 @@ cluster membership and distribution.
 fviz_cluster(list(data = pc$x[, 1:2], cluster = kmeans_model$cluster))
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 <p>
 This plot visualizes clusters and their memberships using the first two
 principal components. It extracts these components from the data, then
@@ -397,7 +974,7 @@ fviz_cluster(kmeans_model, data = pca_result$x[, 1:2], geom = "point",
              pointsize = 2, fill = "white", main = "K-means Clustering Result (PCA)")
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 <p>
 This shows visualization of the clusters and their memberships using the
 first two Principal Components (PCs) obtained from the PCA (Principal
@@ -418,9 +995,6 @@ for a given dataset?
 </p>
 
 ``` r
-library(factoextra)
-library(cluster)
-
 # Calculate silhouette information for k-means clustering
 sil <- silhouette(kmeans_model$cluster, dist(data))
 
@@ -432,7 +1006,7 @@ fviz_silhouette(sil, main = "Silhouette Plot for K-means Clustering")
     ## 1       1   17          0.26
     ## 2       2    4         -0.06
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
 
 <p>
 This plot calculates and visualizes the silhouette information for
@@ -458,7 +1032,7 @@ legend("topright", legend = unique(data_clustered$Cluster),
        col = 1:max(data_clustered$Cluster), pch = 17, title = "Cluster")
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
 <p>
 Overall, this plot visualizes clusters in the data, helping us
 understand how data points group together based on the Whatsapp and
@@ -466,20 +1040,6 @@ Youtube, with each group represented by a different color on the plot.
 </p>
 
 \### Factor Analysis
-
-``` r
-library(ggplot2)
-library(psych)
-```
-
-    ## Warning: package 'psych' was built under R version 4.3.3
-
-    ## 
-    ## Attaching package: 'psych'
-
-    ## The following objects are masked from 'package:ggplot2':
-    ## 
-    ##     %+%, alpha
 
 ``` r
 fa.parallel(social_media_numeric)
@@ -531,7 +1091,7 @@ fa.parallel(social_media_numeric)
 
     ## Warning in cor(sampledata, use = use): the standard deviation is zero
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
 
     ## Parallel analysis suggests that the number of factors =  0  and the number of components =  0
 
@@ -717,13 +1277,13 @@ fit.pc$scores
 fa.plot(fit.pc)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
 
 ``` r
 fa.diagram(fit.pc) # Visualize the relationship
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-22-2.png)<!-- -->
 
 ``` r
 vss(social_media_numeric)
@@ -768,7 +1328,7 @@ vss(social_media_numeric)
     ## Warning in fac(r = r, nfactors = nfactors, n.obs = n.obs, rotate = rotate, : An
     ## ultra-Heywood case was detected.  Examine the results carefully
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-12-3.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-22-3.png)<!-- -->
 
     ## 
     ## Very Simple Structure
@@ -890,7 +1450,7 @@ corrm.social
 plot(corrm.social)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
 
 ``` r
 social_pca <- prcomp(social_media_numeric, scale=TRUE)
@@ -911,13 +1471,13 @@ summary(social_pca)
 plot(social_pca)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-13-2.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-23-2.png)<!-- -->
 
 ``` r
 biplot(fit.pc)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-13-3.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-23-3.png)<!-- -->
 
 <p>
 Overall, these techniques complement each other and can be used together
@@ -927,40 +1487,6 @@ decision-making and further analysis
 </p>
 
 \#### Multiple Regression Analysis
-
-``` r
-library(dplyr)
-library(readxl)
-library(car)
-```
-
-    ## Warning: package 'car' was built under R version 4.3.2
-
-    ## Loading required package: carData
-
-    ## Warning: package 'carData' was built under R version 4.3.2
-
-    ## 
-    ## Attaching package: 'car'
-
-    ## The following object is masked from 'package:psych':
-    ## 
-    ##     logit
-
-    ## The following object is masked from 'package:dplyr':
-    ## 
-    ##     recode
-
-``` r
-library(ggplot2)
-library(GGally)
-```
-
-    ## Warning: package 'GGally' was built under R version 4.3.2
-
-    ## Registered S3 method overwritten by 'GGally':
-    ##   method from   
-    ##   +.gg   ggplot2
 
 ``` r
 social_media <- read_excel("social_media_cleaned.xlsx")
@@ -1070,7 +1596,6 @@ fitted(model)
 #### Residual Analysis
 
 ``` r
-library(car)
 residuals(model)
 ```
 
@@ -1107,26 +1632,26 @@ anova(model)
 plot(model)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->![](Social-Media_files/figure-gfm/unnamed-chunk-17-2.png)<!-- -->![](Social-Media_files/figure-gfm/unnamed-chunk-17-3.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-27-1.png)<!-- -->![](Social-Media_files/figure-gfm/unnamed-chunk-27-2.png)<!-- -->![](Social-Media_files/figure-gfm/unnamed-chunk-27-3.png)<!-- -->
 
     ## Warning in sqrt(crit * p * (1 - hh)/hh): NaNs produced
 
     ## Warning in sqrt(crit * p * (1 - hh)/hh): NaNs produced
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-17-4.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-27-4.png)<!-- -->
 
 ``` r
 avPlots(model)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-17-5.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-27-5.png)<!-- -->
 
 ``` r
 cutoff <- 17/((nrow(social_media)-length(model$coefficients)-2))
 plot(model, which=4, cook.levels=cutoff)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-17-6.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-27-6.png)<!-- -->
 
 ``` r
 influencePlot(model, id.method="identify", main="Influence Plot", sub="Circle size is proportial to Cook's Distance" )
@@ -1149,7 +1674,7 @@ influencePlot(model, id.method="identify", main="Influence Plot", sub="Circle si
     ## Warning in plot.xy(xy.coords(x, y), type = type, ...): "id.method" is not a
     ## graphical parameter
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-17-7.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-27-7.png)<!-- -->
 
     ##       StudRes       Hat      CookD
     ## 8   1.9283209 0.1457607 0.05747738
@@ -1161,7 +1686,7 @@ influencePlot(model, id.method="identify", main="Influence Plot", sub="Circle si
 qqPlot(model, main="QQ Plot")
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-17-8.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-27-8.png)<!-- -->
 
     ## [1]  8 11
 
@@ -1169,7 +1694,7 @@ qqPlot(model, main="QQ Plot")
 ggpairs(data=social_media_numeric, title="Social Media")
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-28-1.png)<!-- -->
 
 ``` r
 ggplot(social_media_numeric, aes(x = fitted(model), y = residuals(model))) +
@@ -1177,7 +1702,7 @@ ggplot(social_media_numeric, aes(x = fitted(model), y = residuals(model))) +
   labs(title = "Residuals vs Fitted Values", x = "Fitted Values", y = "Residuals")
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-18-2.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-28-2.png)<!-- -->
 <p>
 The residual vs. fitted plot is a tool used to evaluate the assumptions
 and adequacy of a regression model. It helps to identify whether the
@@ -1276,27 +1801,6 @@ To perform logistic regression analysis, we will use the glm() function.
   of residuals.
 
 #### Model Development
-
-``` r
-library(readxl)
-library(dplyr)
-library(ROCR)
-```
-
-    ## Warning: package 'ROCR' was built under R version 4.3.3
-
-``` r
-library(pROC)
-```
-
-    ## Type 'citation("pROC")' for a citation.
-
-    ## 
-    ## Attaching package: 'pROC'
-
-    ## The following objects are masked from 'package:stats':
-    ## 
-    ##     cov, smooth, var
 
 ``` r
 social_media <- read_excel("social_media_cleaned.xlsx")
@@ -1458,7 +1962,7 @@ residuals(logit_model)
 plot(logit_model)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->![](Social-Media_files/figure-gfm/unnamed-chunk-24-2.png)<!-- -->![](Social-Media_files/figure-gfm/unnamed-chunk-24-3.png)<!-- -->![](Social-Media_files/figure-gfm/unnamed-chunk-24-4.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-34-1.png)<!-- -->![](Social-Media_files/figure-gfm/unnamed-chunk-34-2.png)<!-- -->![](Social-Media_files/figure-gfm/unnamed-chunk-34-3.png)<!-- -->![](Social-Media_files/figure-gfm/unnamed-chunk-34-4.png)<!-- -->
 <p>
 Function calculates the residuals for the fitted logistic regression
 model (logit_model). It returns a vector containing the residuals.
@@ -1618,7 +2122,7 @@ roc(social_media$Trouble_falling_asleep,logit_model2$fitted.values,plot=TRUE)
 
     ## Setting direction: controls < cases
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-35-1.png)<!-- -->
 
     ## 
     ## Call:
@@ -1645,7 +2149,7 @@ plot(roc_curve, main = "ROC Curve", col = "blue", lwd = 2)
 abline(a = 0, b = 1, lty = 2, col = "red")
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-25-2.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-35-2.png)<!-- -->
 
 ``` r
 auc_value <- auc(roc_curve)
@@ -1663,7 +2167,7 @@ plot(perf, main = "ROC Curve", col = "blue", lwd = 2)
 abline(a = 0, b = 1, lty = 2, col = "red")
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-25-3.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-35-3.png)<!-- -->
 
 ``` r
 # Plot ROC curve
@@ -1686,7 +2190,7 @@ plot.roc(social_media$Trouble_falling_asleep , logit_model2$fitted.values, perce
 legend("bottomright", legend=c("Simple", "Non Simple"), col=c("#377eb8", "#4daf4a"), lwd=4) 
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-25-4.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-35-4.png)<!-- -->
 
 <p>
 The logistic regression model estimates the likelihood of experiencing
@@ -1734,10 +2238,6 @@ accuracy metrics including accuracy and precision.
 ### Discriminant Analysis
 
 ``` r
-library(MASS)
-library(readxl)
-library(ROCR)
-
 mydata <- read_excel("social_media_cleaned.xlsx")
 mydata$Binary_tfs <- ifelse(mydata$Trouble_falling_asleep == "1", 1, 0)
 ```
@@ -1803,7 +2303,7 @@ print(lda_model)
 plot(lda_model)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-30-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-40-1.png)<!-- -->
 
 #### Prediction
 
@@ -1942,4 +2442,8 @@ abline(a = 0, b = 1, lty = 2, col = "red")
 text(x = .25, y = .65 ,paste("AUC = ", round(auc.train[[1]],3), sep = ""))
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-32-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-42-1.png)<!-- -->
+
+#### Model Insights
+
+#### Learnings and Takeaways

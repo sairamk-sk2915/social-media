@@ -1,5 +1,5 @@
 ---
-title: "Social Media"
+title: "Social Media Data Analysis"
 author: "Satya Shiva Sai Ram Kamma"
 date: "2024-03-25"
 output: github_document
@@ -9,16 +9,197 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+<center>
+### [Social Media Data Analysis]{.underline }
+</center>
+#### Project Overview:
+<p>This project looks at how using social media affects our mood, productivity, and sleep. We're analyzing data to see if there's a connection between how much time people spend on platforms like Instagram or Twitter and how they feel or how well they sleep. The goal is to find out if certain online habits are linked to feeling better or worse, and what we can learn from that.</p>
+
+#### Data Collection
+<p>The variables included in this dataset</p>
+  - character
+  - Instagram
+  - LinkedIn
+  - SnapChat
+  - Twitter
+  - Whatsapp/Wechat
+  - youtube
+  - OTT
+  - Reddit
+  - Trouble_falling_asleep 
+  - Mood Productivity
+  - Tired waking up in morning
+  - How you felt the entire week?   
+  
+#### Dependent Variables
+    - Mood Productivity
+    - Trouble falling asleep
+
+#### Independent Variables
+    - Instagram
+    - LinkedIn
+    - SnapChat
+    - Twitter
+    - Whatsapp/Wechat
+    - youtube
+    - OTT
+    - Reddit
+
+#### Data Dictionary
+
+- <b>character:</b> Name or identifier of the individual/person.
+- <b>Instagram:</b> Activity level on Instagram (e.g., time spent, interactions).
+- <b>LinkedIn:</b> Activity level on LinkedIn.
+- <b>SnapChat:</b> Activity level on Snapchat.
+- <b>Twitter:</b> Activity level on Twitter.
+- <b>Whatsapp/Wechat:</b> Activity level on WhatsApp or WeChat.
+- <b>youtube:</b> Activity level on YouTube.
+- <b>OTT:</b> Activity level on Over-the-Top platforms (e.g., Netflix, Hulu).
+- <b>Reddit:</b> Activity level on Reddit.
+- <b>Trouble_falling_asleep:</b>  A measure indicating if the individual experiences trouble falling asleep, possibly rated on a scale (e.g., 0 for no trouble, 1 for some trouble).
+- <b>Mood Productivity:</b> The individual's mood, possibly rated on a scale (e.g., 1 to 5, with 5 being very positive).
+- <b>Tired waking up in morning:</b> A measure indicating how tired the individual feels upon waking up in the morning, possibly rated on a scale (e.g., 0 for not tired, 1 for somewhat tired).
+- <b>How you felt the entire week?:</b>  An overall measure of how the individual felt throughout the entire week, possibly rated on a scale (e.g., 1 to 5, with 5 being very positive).
+
+#### Data Collection
+
 ```{r}
 library(readxl)
 library(dplyr)
 library(FactoMineR)
 library(factoextra)
+library(ggplot2)
+library(ggfortify)
+library(MASS)
+library(ggrepel)
+library(stats)
+library(scatterplot3d)
+library(cluster)
+library(psych)
+library(car)
+library(GGally)
+library(ROCR)
+library(pROC)
+library(DataExplorer)
+```
 
+```{r}
 social_media <- read_excel("social_media_cleaned.xlsx")
-
 social_media_numeric <- select_if(social_media, is.numeric)
 
+print(social_media)
+```      
+
+```{r}
+head(social_media)
+summary(social_media)
+str(social_media)
+```
+
+<p>Data Cleaning</p>
+```{r}
+is.na(social_media)
+sum(is.na(social_media))
+```
+#### EDA
+<p>The create_report() function in R's DataExplorer package makes it easier to explore datasets by creating a detailed report automatically. It summarizes numerical and categorical data, finds missing values, identifies outliers, and examines relationships between variables. This interactive report helps users understand the dataset's structure, distributions, and any data quality concerns, allowing analysts and data scientists to gain insights into important patterns and trends quickly.</p>
+
+```{r}
+describe(social_media)
+create_report(social_media)
+```
+[Click here to view Genetated EDA Report File](report.html)
+
+#### Correltion and Coefficient
+```{r}
+correlation_coefficient <- cor(social_media$Instagram, social_media$Trouble_falling_asleep)
+print(correlation_coefficient)
+
+plot(social_media$Instagram, social_media$Trouble_falling_asleep,
+     xlab = "Instagram", ylab = "Trouble Felling asleep",
+     main = "Scatter Plot of Instagram vs. Trouble Felling asleep")
+
+abline(lm(social_media$Trouble_falling_asleep ~ social_media$Instagram), col = "red")
+
+plot(social_media$`Whatsapp/Wechat`, social_media$Trouble_falling_asleep,
+     xlab = "Whatsapp", ylab = "Trouble Felling asleep",
+     main = "Scatter Plot of Whatsapp vs. Trouble Felling asleep")
+
+abline(lm(social_media$Trouble_falling_asleep ~ social_media$`Whatsapp/Wechat`), col = "red")
+
+print(paste("Correlation Coefficient between Instagram and Trouble Felling asleep Duration:", correlation_coefficient))
+
+```
+
+```{r}
+num_vars <- c("Instagram", "LinkedIn", "Whatsapp/Wechat", "Trouble_falling_asleep")
+
+for (var in num_vars) {
+  p <- ggplot(social_media, aes(x = social_media[[var]])) +
+    geom_histogram(fill = "skyblue", color = "black") +
+    labs(title = paste("Histogram of", var), x = var, y = "Frequency") +
+    theme_minimal() +
+    theme(plot.title = element_text(hjust = 0.5))
+  print(p)
+}
+```
+<p><b>What is the overall level of addiction to social media apps among all users, and how does it relate to their reported trouble falling asleep?</b></p>
+```{r}
+social_media$Social_Media_Addiction <- rowSums(social_media[, c("Instagram", "LinkedIn" , "Twitter", "Whatsapp/Wechat" , "OTT", "Reddit")])
+
+summary(social_media$Social_Media_Addiction)
+summary(social_media$Trouble_falling_asleep)
+
+# Scatter plot of social media addiction vs. trouble falling asleep
+ggplot(social_media, aes(x = Social_Media_Addiction, y = Trouble_falling_asleep)) +
+  geom_point(color = "purple") +
+  labs(title = "Social Media Addiction vs. Trouble Falling Asleep",
+       x = "Social Media Addiction",
+       y = "Trouble Falling Asleep")
+
+
+```
+<p><b>How do the levels of addiction to individual social media apps vary among users, and is there a relationship between addiction to specific apps and reported trouble falling asleep?</b></p>
+```{r}
+summary(social_media$Instagram)
+summary(social_media$`Whatsapp/Wechat`)
+
+ggplot(social_media, aes(x = Instagram, y = Trouble_falling_asleep)) +
+  geom_point(color = "orange") +
+  labs(title = "Instagram Activity vs. Trouble Falling Asleep",
+       x = "Instagram Activity",
+       y = "Trouble Falling Asleep")
+
+ggplot(social_media, aes(x = `Whatsapp/Wechat`, y = Trouble_falling_asleep)) +
+  geom_point(color = "blue") +
+  labs(title = "Whatsapp Activity vs. Trouble Falling Asleep",
+       x = "Whatsapp Activity",
+       y = "Trouble Falling Asleep")
+
+```
+
+<p><b>Are there any noticeable trends in the reported mood levels throughout the week, and how do these trends correlate with social media activity?</b></p>
+```{r}
+n_rows <- nrow(social_media)
+day_of_week <- factor(1:n_rows)
+unique_days <- unique(day_of_week)
+
+ggplot(social_media, aes(x = day_of_week, y = `Mood Productivity`, group = 1)) +
+  geom_line(color = "green") +
+  labs(title = "Average Mood Levels Throughout the Week",
+       x = "Day of the Week",
+       y = "Average Mood")
+
+correlation_matrix <- cor(social_media[, c("Mood Productivity", "Instagram", "LinkedIn", "Twitter", "Whatsapp/Wechat", "youtube", "OTT", "Reddit")])
+
+# Print correlation matrix
+print(correlation_matrix)
+
+```
+### MVA models 
+
+#### PCA
+```{r}
 # Perform PCA
 pca_result <- prcomp(social_media_numeric, scale = TRUE)
 
@@ -78,7 +259,6 @@ fviz_pca_ind(pca_result,
              legend.title = "Groups"
 )
 
-library(scatterplot3d)
 scatterplot3d(pca_result$x[,1:3], color = social_media$Instagram)
 
 
@@ -88,16 +268,6 @@ scatterplot3d(pca_result$x[,1:3], color = social_media$Instagram)
 ### Cluster Analysis
 
 ```{r}
-library(readxl)
-library(factoextra)
-library(ggplot2)
-library(factoextra)
-library(ggfortify)
-library(MASS)
-library(ggrepel)
-library(stats)
-
-
 social_media_cluster <- read_excel("social_media_cleaned.xlsx")
 data.scaled <- scale(x = social_media_cluster[, -1], center = TRUE, scale = TRUE)
 data <- data.scaled
@@ -185,9 +355,6 @@ fviz_cluster(kmeans_model, data = pca_result$x[, 1:2], geom = "point",
   
   
 ```{r}
-library(factoextra)
-library(cluster)
-
 # Calculate silhouette information for k-means clustering
 sil <- silhouette(kmeans_model$cluster, dist(data))
 
@@ -215,8 +382,6 @@ legend("topright", legend = unique(data_clustered$Cluster),
   ### Factor Analysis
   
 ```{r}
-library(ggplot2)
-library(psych)
 fa.parallel(social_media_numeric)
 ```
 <p>Parallel analysis suggests that the number of factors = 0 and the number of components = 0</p>
@@ -281,11 +446,6 @@ biplot(fit.pc)
   #### Multiple Regression Analysis
   
 ```{r}
-library(dplyr)
-library(readxl)
-library(car)
-library(ggplot2)
-library(GGally)
 
 social_media <- read_excel("social_media_cleaned.xlsx")
 social_media_numeric <- select_if(social_media, is.numeric)
@@ -313,7 +473,6 @@ fitted(model)
 
 #### Residual Analysis
 ```{r}
-library(car)
 residuals(model)
 anova(model)
 plot(model)
@@ -385,11 +544,6 @@ cat("RMSE:", rmse, "\n")
 #### Model Development
 
 ```{r}
-library(readxl)
-library(dplyr)
-library(ROCR)
-library(pROC)
-
 social_media <- read_excel("social_media_cleaned.xlsx")
 social_media_numeric <- select_if(social_media, is.numeric)
 ```
@@ -504,10 +658,6 @@ print(accuracy)
 ### Discriminant Analysis
 
 ```{r}
-library(MASS)
-library(readxl)
-library(ROCR)
-
 mydata <- read_excel("social_media_cleaned.xlsx")
 mydata$Binary_tfs <- ifelse(mydata$Trouble_falling_asleep == "1", 1, 0)
 ```
@@ -555,3 +705,8 @@ plot(roc.perf, main = "ROC Curve", col = "blue", lwd = 2)
 abline(a = 0, b = 1, lty = 2, col = "red")
 text(x = .25, y = .65 ,paste("AUC = ", round(auc.train[[1]],3), sep = ""))
 ```
+
+#### Model Insights
+
+
+#### Learnings and Takeaways
