@@ -110,6 +110,60 @@ create_report(social_media)
 ```
 [Click here to view Genetated EDA Report File](report.html)
 
+```{r}
+library(corrplot)
+cor_matrix <- cor(social_media[, 2:12])
+
+# Plot correlation matrix
+corrplot(cor_matrix, type = "upper", order = "hclust", tl.col = "black", tl.srt = 45)
+
+```
+```{r}
+# Subset the data to include only the required variables
+names(social_media) <- c("character", "Instagram", "LinkedIn", "SnapChat", 
+                 "Twitter", "Whatsapp", "youtube", 
+                 "OTT", "Reddit","Trouble_falling_asleep","Mood_Productivity","Tired waking up in morning", "How you felt the entire week?")
+
+selected_vars <- c("Instagram", "LinkedIn", "SnapChat", 
+                   "Twitter", "Whatsapp", "youtube", 
+                   "OTT", "Reddit")
+
+boxplots <- lapply(selected_vars, function(var) {
+  ggplot(social_media, aes_string(y = var)) +
+    geom_boxplot(fill = "green", color = "green", alpha = 0.7) +
+    labs(title = paste("Boxplot of", var), y = var) +
+    theme_minimal() +
+    theme(plot.title = element_text(size = 14, face = "bold"),
+          axis.title.y = element_text(size = 12),
+          axis.text = element_text(size = 10),
+          legend.position = "none") +
+    coord_flip()
+})
+
+gridExtra::grid.arrange(grobs = boxplots, ncol = 2)
+```
+
+```{r}
+library(tidyr)
+names(social_media)[is.na(names(social_media))] <- "COl1"
+
+# Reshape data into long format
+social_media_long <- pivot_longer(social_media, 
+                                  cols = c(Instagram, LinkedIn, SnapChat, 
+                                           Twitter, Whatsapp, youtube, 
+                                           OTT, Reddit),
+                                  names_to = "variable", 
+                                  values_to = "value")
+
+
+ggplot(social_media_long, aes(x = value, fill = factor(Trouble_falling_asleep))) +
+  geom_density(alpha = 0.5) +
+  labs(title = "Density Plots of Various Social Media Usages by Trouble Falling Asleep",
+       x = "Usage",
+       y = "Density",
+       fill = "Trouble Falling Asleep") +
+  facet_wrap(~ variable, scales = "free_x", nrow = 3)
+```
 #### Correltion and Coefficient
 ```{r}
 correlation_coefficient <- cor(social_media$Instagram, social_media$Trouble_falling_asleep)
@@ -121,18 +175,18 @@ plot(social_media$Instagram, social_media$Trouble_falling_asleep,
 
 abline(lm(social_media$Trouble_falling_asleep ~ social_media$Instagram), col = "red")
 
-plot(social_media$`Whatsapp/Wechat`, social_media$Trouble_falling_asleep,
+plot(social_media$Whatsapp, social_media$Trouble_falling_asleep,
      xlab = "Whatsapp", ylab = "Trouble Felling asleep",
      main = "Scatter Plot of Whatsapp vs. Trouble Felling asleep")
 
-abline(lm(social_media$Trouble_falling_asleep ~ social_media$`Whatsapp/Wechat`), col = "red")
+abline(lm(social_media$Trouble_falling_asleep ~ social_media$Whatsapp), col = "red")
 
 print(paste("Correlation Coefficient between Instagram and Trouble Felling asleep Duration:", correlation_coefficient))
 
 ```
 
 ```{r}
-num_vars <- c("Instagram", "LinkedIn", "Whatsapp/Wechat", "Trouble_falling_asleep")
+num_vars <- c("Instagram", "LinkedIn", "Whatsapp", "Trouble_falling_asleep")
 
 for (var in num_vars) {
   p <- ggplot(social_media, aes(x = social_media[[var]])) +
@@ -145,7 +199,7 @@ for (var in num_vars) {
 ```
 <p><b>What is the overall level of addiction to social media apps among all users, and how does it relate to their reported trouble falling asleep?</b></p>
 ```{r}
-social_media$Social_Media_Addiction <- rowSums(social_media[, c("Instagram", "LinkedIn" , "Twitter", "Whatsapp/Wechat" , "OTT", "Reddit")])
+social_media$Social_Media_Addiction <- rowSums(social_media[, c("Instagram", "LinkedIn" , "Twitter", "Whatsapp" , "OTT", "Reddit")])
 
 summary(social_media$Social_Media_Addiction)
 summary(social_media$Trouble_falling_asleep)
@@ -162,7 +216,7 @@ ggplot(social_media, aes(x = Social_Media_Addiction, y = Trouble_falling_asleep)
 <p><b>How do the levels of addiction to individual social media apps vary among users, and is there a relationship between addiction to specific apps and reported trouble falling asleep?</b></p>
 ```{r}
 summary(social_media$Instagram)
-summary(social_media$`Whatsapp/Wechat`)
+summary(social_media$Whatsapp)
 
 ggplot(social_media, aes(x = Instagram, y = Trouble_falling_asleep)) +
   geom_point(color = "orange") +
@@ -170,7 +224,7 @@ ggplot(social_media, aes(x = Instagram, y = Trouble_falling_asleep)) +
        x = "Instagram Activity",
        y = "Trouble Falling Asleep")
 
-ggplot(social_media, aes(x = `Whatsapp/Wechat`, y = Trouble_falling_asleep)) +
+ggplot(social_media, aes(x = Whatsapp , y = Trouble_falling_asleep)) +
   geom_point(color = "blue") +
   labs(title = "Whatsapp Activity vs. Trouble Falling Asleep",
        x = "Whatsapp Activity",
@@ -184,13 +238,13 @@ n_rows <- nrow(social_media)
 day_of_week <- factor(1:n_rows)
 unique_days <- unique(day_of_week)
 
-ggplot(social_media, aes(x = day_of_week, y = `Mood Productivity`, group = 1)) +
+ggplot(social_media, aes(x = day_of_week, y = `Mood_Productivity`, group = 1)) +
   geom_line(color = "green") +
   labs(title = "Average Mood Levels Throughout the Week",
        x = "Day of the Week",
        y = "Average Mood")
 
-correlation_matrix <- cor(social_media[, c("Mood Productivity", "Instagram", "LinkedIn", "Twitter", "Whatsapp/Wechat", "youtube", "OTT", "Reddit")])
+correlation_matrix <- cor(social_media[, c("Mood_Productivity", "Instagram", "LinkedIn", "Twitter", "Whatsapp", "youtube", "OTT", "Reddit")])
 
 # Print correlation matrix
 print(correlation_matrix)
@@ -705,8 +759,3 @@ plot(roc.perf, main = "ROC Curve", col = "blue", lwd = 2)
 abline(a = 0, b = 1, lty = 2, col = "red")
 text(x = .25, y = .65 ,paste("AUC = ", round(auc.train[[1]],3), sep = ""))
 ```
-
-#### Model Insights
-
-
-#### Learnings and Takeaways

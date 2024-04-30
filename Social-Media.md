@@ -448,14 +448,90 @@ create_report(social_media)
 
     ## output file: C:/Rutgers/SEM 2/MVA/R Exercise/Socia Media/report.knit.md
 
-    ## "C:/Program Files/RStudio/resources/app/bin/quarto/bin/tools/pandoc" +RTS -K512m -RTS "C:\Rutgers\SEM2~1\MVA\REXERC~1\SOCIAM~1\REPORT~1.MD" --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output pandoc4324de14946.html --lua-filter "C:\Users\saira\AppData\Local\R\win-library\4.3\rmarkdown\rmarkdown\lua\pagebreak.lua" --lua-filter "C:\Users\saira\AppData\Local\R\win-library\4.3\rmarkdown\rmarkdown\lua\latex-div.lua" --embed-resources --standalone --variable bs3=TRUE --section-divs --table-of-contents --toc-depth 6 --template "C:\Users\saira\AppData\Local\R\win-library\4.3\rmarkdown\rmd\h\default.html" --no-highlight --variable highlightjs=1 --variable theme=yeti --mathjax --variable "mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" --include-in-header "C:\Users\saira\AppData\Local\Temp\RtmpeWGS8T\rmarkdown-str4324392172ba.html"
+    ## "C:/Program Files/RStudio/resources/app/bin/quarto/bin/tools/pandoc" +RTS -K512m -RTS "C:\Rutgers\SEM2~1\MVA\REXERC~1\SOCIAM~1\REPORT~1.MD" --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output pandoc466825784781.html --lua-filter "C:\Users\saira\AppData\Local\R\win-library\4.3\rmarkdown\rmarkdown\lua\pagebreak.lua" --lua-filter "C:\Users\saira\AppData\Local\R\win-library\4.3\rmarkdown\rmarkdown\lua\latex-div.lua" --embed-resources --standalone --variable bs3=TRUE --section-divs --table-of-contents --toc-depth 6 --template "C:\Users\saira\AppData\Local\R\win-library\4.3\rmarkdown\rmd\h\default.html" --no-highlight --variable highlightjs=1 --variable theme=yeti --mathjax --variable "mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" --include-in-header "C:\Users\saira\AppData\Local\Temp\RtmpOKs29X\rmarkdown-str466845362854.html"
 
     ## 
     ## Output created: report.html
 
 [Click here to view Genetated EDA Report File](report.html)
 
-#### Correltion and Coefficient
+``` r
+library(corrplot)
+```
+
+    ## Warning: package 'corrplot' was built under R version 4.3.2
+
+    ## corrplot 0.92 loaded
+
+``` r
+cor_matrix <- cor(social_media[, 2:12])
+
+# Plot correlation matrix
+corrplot(cor_matrix, type = "upper", order = "hclust", tl.col = "black", tl.srt = 45)
+```
+
+![](Social-Media_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+``` r
+# Subset the data to include only the required variables
+names(social_media) <- c("character", "Instagram", "LinkedIn", "SnapChat", 
+                 "Twitter", "Whatsapp", "youtube", 
+                 "OTT", "Reddit","Trouble_falling_asleep","Mood_Productivity","Tired waking up in morning", "How you felt the entire week?")
+
+selected_vars <- c("Instagram", "LinkedIn", "SnapChat", 
+                   "Twitter", "Whatsapp", "youtube", 
+                   "OTT", "Reddit")
+
+boxplots <- lapply(selected_vars, function(var) {
+  ggplot(social_media, aes_string(y = var)) +
+    geom_boxplot(fill = "green", color = "green", alpha = 0.7) +
+    labs(title = paste("Boxplot of", var), y = var) +
+    theme_minimal() +
+    theme(plot.title = element_text(size = 14, face = "bold"),
+          axis.title.y = element_text(size = 12),
+          axis.text = element_text(size = 10),
+          legend.position = "none") +
+    coord_flip()
+})
+```
+
+    ## Warning: `aes_string()` was deprecated in ggplot2 3.0.0.
+    ## ℹ Please use tidy evaluation idioms with `aes()`.
+    ## ℹ See also `vignette("ggplot2-in-packages")` for more information.
+    ## This warning is displayed once every 8 hours.
+    ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+    ## generated.
+
+``` r
+gridExtra::grid.arrange(grobs = boxplots, ncol = 2)
+```
+
+![](Social-Media_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+``` r
+library(tidyr)
+names(social_media)[is.na(names(social_media))] <- "COl1"
+
+# Reshape data into long format
+social_media_long <- pivot_longer(social_media, 
+                                  cols = c(Instagram, LinkedIn, SnapChat, 
+                                           Twitter, Whatsapp, youtube, 
+                                           OTT, Reddit),
+                                  names_to = "variable", 
+                                  values_to = "value")
+
+
+ggplot(social_media_long, aes(x = value, fill = factor(Trouble_falling_asleep))) +
+  geom_density(alpha = 0.5) +
+  labs(title = "Density Plots of Various Social Media Usages by Trouble Falling Asleep",
+       x = "Usage",
+       y = "Density",
+       fill = "Trouble Falling Asleep") +
+  facet_wrap(~ variable, scales = "free_x", nrow = 3)
+```
+
+![](Social-Media_files/figure-gfm/unnamed-chunk-8-1.png)<!-- --> \####
+Correltion and Coefficient
 
 ``` r
 correlation_coefficient <- cor(social_media$Instagram, social_media$Trouble_falling_asleep)
@@ -472,17 +548,17 @@ plot(social_media$Instagram, social_media$Trouble_falling_asleep,
 abline(lm(social_media$Trouble_falling_asleep ~ social_media$Instagram), col = "red")
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 ``` r
-plot(social_media$`Whatsapp/Wechat`, social_media$Trouble_falling_asleep,
+plot(social_media$Whatsapp, social_media$Trouble_falling_asleep,
      xlab = "Whatsapp", ylab = "Trouble Felling asleep",
      main = "Scatter Plot of Whatsapp vs. Trouble Felling asleep")
 
-abline(lm(social_media$Trouble_falling_asleep ~ social_media$`Whatsapp/Wechat`), col = "red")
+abline(lm(social_media$Trouble_falling_asleep ~ social_media$Whatsapp), col = "red")
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-9-2.png)<!-- -->
 
 ``` r
 print(paste("Correlation Coefficient between Instagram and Trouble Felling asleep Duration:", correlation_coefficient))
@@ -491,7 +567,7 @@ print(paste("Correlation Coefficient between Instagram and Trouble Felling aslee
     ## [1] "Correlation Coefficient between Instagram and Trouble Felling asleep Duration: 0.505358558539933"
 
 ``` r
-num_vars <- c("Instagram", "LinkedIn", "Whatsapp/Wechat", "Trouble_falling_asleep")
+num_vars <- c("Instagram", "LinkedIn", "Whatsapp", "Trouble_falling_asleep")
 
 for (var in num_vars) {
   p <- ggplot(social_media, aes(x = social_media[[var]])) +
@@ -508,28 +584,28 @@ for (var in num_vars) {
 
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
     ## Warning: Use of `social_media[[var]]` is discouraged.
     ## ℹ Use `.data[[var]]` instead.
 
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-7-2.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-10-2.png)<!-- -->
 
     ## Warning: Use of `social_media[[var]]` is discouraged.
     ## ℹ Use `.data[[var]]` instead.
 
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-7-3.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-10-3.png)<!-- -->
 
     ## Warning: Use of `social_media[[var]]` is discouraged.
     ## ℹ Use `.data[[var]]` instead.
 
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-7-4.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-10-4.png)<!-- -->
 <p>
 <b>What is the overall level of addiction to social media apps among all
 users, and how does it relate to their reported trouble falling
@@ -537,7 +613,7 @@ asleep?</b>
 </p>
 
 ``` r
-social_media$Social_Media_Addiction <- rowSums(social_media[, c("Instagram", "LinkedIn" , "Twitter", "Whatsapp/Wechat" , "OTT", "Reddit")])
+social_media$Social_Media_Addiction <- rowSums(social_media[, c("Instagram", "LinkedIn" , "Twitter", "Whatsapp" , "OTT", "Reddit")])
 
 summary(social_media$Social_Media_Addiction)
 ```
@@ -561,7 +637,7 @@ ggplot(social_media, aes(x = Social_Media_Addiction, y = Trouble_falling_asleep)
        y = "Trouble Falling Asleep")
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 <p>
 <b>How do the levels of addiction to individual social media apps vary
 among users, and is there a relationship between addiction to specific
@@ -576,7 +652,7 @@ summary(social_media$Instagram)
     ##  0.1667  3.7667  5.3833  5.9230  7.0000 15.0167
 
 ``` r
-summary(social_media$`Whatsapp/Wechat`)
+summary(social_media$Whatsapp)
 ```
 
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
@@ -590,17 +666,17 @@ ggplot(social_media, aes(x = Instagram, y = Trouble_falling_asleep)) +
        y = "Trouble Falling Asleep")
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
 ``` r
-ggplot(social_media, aes(x = `Whatsapp/Wechat`, y = Trouble_falling_asleep)) +
+ggplot(social_media, aes(x = Whatsapp , y = Trouble_falling_asleep)) +
   geom_point(color = "blue") +
   labs(title = "Whatsapp Activity vs. Trouble Falling Asleep",
        x = "Whatsapp Activity",
        y = "Trouble Falling Asleep")
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-9-2.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
 
 <p>
 <b>Are there any noticeable trends in the reported mood levels
@@ -613,40 +689,40 @@ n_rows <- nrow(social_media)
 day_of_week <- factor(1:n_rows)
 unique_days <- unique(day_of_week)
 
-ggplot(social_media, aes(x = day_of_week, y = `Mood Productivity`, group = 1)) +
+ggplot(social_media, aes(x = day_of_week, y = `Mood_Productivity`, group = 1)) +
   geom_line(color = "green") +
   labs(title = "Average Mood Levels Throughout the Week",
        x = "Day of the Week",
        y = "Average Mood")
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 ``` r
-correlation_matrix <- cor(social_media[, c("Mood Productivity", "Instagram", "LinkedIn", "Twitter", "Whatsapp/Wechat", "youtube", "OTT", "Reddit")])
+correlation_matrix <- cor(social_media[, c("Mood_Productivity", "Instagram", "LinkedIn", "Twitter", "Whatsapp", "youtube", "OTT", "Reddit")])
 
 # Print correlation matrix
 print(correlation_matrix)
 ```
 
-    ##                   Mood Productivity   Instagram     LinkedIn    Twitter
-    ## Mood Productivity       1.000000000  0.37498880  0.335447863  0.1029958
+    ##                   Mood_Productivity   Instagram     LinkedIn    Twitter
+    ## Mood_Productivity       1.000000000  0.37498880  0.335447863  0.1029958
     ## Instagram               0.374988801  1.00000000  0.097056399 -0.1930565
     ## LinkedIn                0.335447863  0.09705640  1.000000000 -0.1300685
     ## Twitter                 0.102995756 -0.19305653 -0.130068464  1.0000000
-    ## Whatsapp/Wechat         0.308871917  0.37769615  0.228835623 -0.4958329
+    ## Whatsapp                0.308871917  0.37769615  0.228835623 -0.4958329
     ## youtube                -0.003621212  0.33000187  0.452197669 -0.1881777
     ## OTT                     0.153208032  0.26738122  0.185492527  0.5570740
     ## Reddit                  0.075429291 -0.07461553 -0.006992884  0.1649030
-    ##                   Whatsapp/Wechat      youtube       OTT       Reddit
-    ## Mood Productivity       0.3088719 -0.003621212 0.1532080  0.075429291
-    ## Instagram               0.3776962  0.330001869 0.2673812 -0.074615529
-    ## LinkedIn                0.2288356  0.452197669 0.1854925 -0.006992884
-    ## Twitter                -0.4958329 -0.188177691 0.5570740  0.164902964
-    ## Whatsapp/Wechat         1.0000000  0.371685163 0.1336204 -0.134449660
-    ## youtube                 0.3716852  1.000000000 0.1605652  0.026399913
-    ## OTT                     0.1336204  0.160565234 1.0000000  0.232791099
-    ## Reddit                 -0.1344497  0.026399913 0.2327911  1.000000000
+    ##                     Whatsapp      youtube       OTT       Reddit
+    ## Mood_Productivity  0.3088719 -0.003621212 0.1532080  0.075429291
+    ## Instagram          0.3776962  0.330001869 0.2673812 -0.074615529
+    ## LinkedIn           0.2288356  0.452197669 0.1854925 -0.006992884
+    ## Twitter           -0.4958329 -0.188177691 0.5570740  0.164902964
+    ## Whatsapp           1.0000000  0.371685163 0.1336204 -0.134449660
+    ## youtube            0.3716852  1.000000000 0.1605652  0.026399913
+    ## OTT                0.1336204  0.160565234 1.0000000  0.232791099
+    ## Reddit            -0.1344497  0.026399913 0.2327911  1.000000000
 
 ### MVA models
 
@@ -660,7 +736,7 @@ pca_result <- prcomp(social_media_numeric, scale = TRUE)
 plot(pca_result$sdev^2, type = "b", xlab = "Principal Component", ylab = "Variance Explained")
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
 ``` r
 #From PCA variate representation of each PC, It’s evident that PC1 and PC2 add arround 50% of the to total variance
@@ -668,7 +744,7 @@ plot(pca_result$sdev^2, type = "b", xlab = "Principal Component", ylab = "Varian
 plot(pca_result$sdev^2, xlab = "Component number", ylab = "Component variance", type = "l", main = "Scree diagram")
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-11-2.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->
 
 ``` r
 # Loadings
@@ -725,14 +801,14 @@ pairs(data_projection_all, col = "blue", pch = 19,
       main = "Data Visualization using All PCs")
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-11-3.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-14-3.png)<!-- -->
 
 ``` r
 # Visualize Eigenvalues
 fviz_eig(pca_result, addlabels = TRUE)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-11-4.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-14-4.png)<!-- -->
 
 ``` r
 # Visualize Variable Quality
@@ -741,7 +817,7 @@ fviz_pca_var(pca_result, col.var = "cos2",
              repel = TRUE)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-11-5.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-14-5.png)<!-- -->
 
 ``` r
 # Visualize Individual Contributions
@@ -753,41 +829,41 @@ fviz_pca_ind(pca_result,
 )
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-11-6.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-14-6.png)<!-- -->
 
 ``` r
 # Biplot
 biplot(pca_result)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-11-7.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-14-7.png)<!-- -->
 
 ``` r
 # Variable correlation plot (Correlation Circle)
 fviz_pca_var(pca_result, col.var = "black")
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-11-8.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-14-8.png)<!-- -->
 
 ``` r
 # Quality of representation of variables on dimensions 1 and 2
 fviz_cos2(pca_result, choice = "var", axes = 1:2)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-11-9.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-14-9.png)<!-- -->
 
 ``` r
 # Contributions of variables to principal components
 fviz_contrib(pca_result, choice = "var", axes = 1, top = 10)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-11-10.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-14-10.png)<!-- -->
 
 ``` r
 fviz_contrib(pca_result, choice = "var", axes = 2, top = 10)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-11-11.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-14-11.png)<!-- -->
 
 ``` r
 # Visualize individual contributions
@@ -799,13 +875,13 @@ fviz_pca_ind(pca_result,
 )
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-11-12.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-14-12.png)<!-- -->
 
 ``` r
 scatterplot3d(pca_result$x[,1:3], color = social_media$Instagram)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-11-13.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-14-13.png)<!-- -->
 
 ### Cluster Analysis
 
@@ -856,7 +932,7 @@ plot(pc_first_three, col = cluster_colors[km_clusters$cluster],
      xlab = "", ylab = "", pch = 20)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 <p>
 It is first performs Principal Component Analysis (PCA) on scaled data,
 reducing its dimensionality.
@@ -889,7 +965,7 @@ plot(hc, main = "Dendrogram of Hierarchical Clustering (Subset of 20 Rows)",
      xlab = "Sample Index", ylab = "Distance", sub = NULL)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
 <p>
 The plot shows the first three principal components, performs
@@ -903,7 +979,7 @@ reduced-dimensional space.
 fviz_cluster(list(data = pc$x[, 1:2], cluster = km_clusters$cluster))
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
 <p>
 This plot visualizes clustering results by plotting data points in a
@@ -949,7 +1025,7 @@ cluster membership and distribution.
 fviz_cluster(list(data = pc$x[, 1:2], cluster = kmeans_model$cluster))
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
 <p>
 This plot visualizes clusters and their memberships using the first two
 principal components. It extracts these components from the data, then
@@ -974,7 +1050,7 @@ fviz_cluster(kmeans_model, data = pca_result$x[, 1:2], geom = "point",
              pointsize = 2, fill = "white", main = "K-means Clustering Result (PCA)")
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
 <p>
 This shows visualization of the clusters and their memberships using the
 first two Principal Components (PCs) obtained from the PCA (Principal
@@ -1006,7 +1082,7 @@ fviz_silhouette(sil, main = "Silhouette Plot for K-means Clustering")
     ## 1       1   17          0.26
     ## 2       2    4         -0.06
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
 
 <p>
 This plot calculates and visualizes the silhouette information for
@@ -1032,7 +1108,7 @@ legend("topright", legend = unique(data_clustered$Cluster),
        col = 1:max(data_clustered$Cluster), pch = 17, title = "Cluster")
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
 <p>
 Overall, this plot visualizes clusters in the data, helping us
 understand how data points group together based on the Whatsapp and
@@ -1091,7 +1167,7 @@ fa.parallel(social_media_numeric)
 
     ## Warning in cor(sampledata, use = use): the standard deviation is zero
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
 
     ## Parallel analysis suggests that the number of factors =  0  and the number of components =  0
 
@@ -1277,13 +1353,13 @@ fit.pc$scores
 fa.plot(fit.pc)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
 
 ``` r
 fa.diagram(fit.pc) # Visualize the relationship
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-22-2.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-25-2.png)<!-- -->
 
 ``` r
 vss(social_media_numeric)
@@ -1328,7 +1404,7 @@ vss(social_media_numeric)
     ## Warning in fac(r = r, nfactors = nfactors, n.obs = n.obs, rotate = rotate, : An
     ## ultra-Heywood case was detected.  Examine the results carefully
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-22-3.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-25-3.png)<!-- -->
 
     ## 
     ## Very Simple Structure
@@ -1450,7 +1526,7 @@ corrm.social
 plot(corrm.social)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
 
 ``` r
 social_pca <- prcomp(social_media_numeric, scale=TRUE)
@@ -1471,13 +1547,13 @@ summary(social_pca)
 plot(social_pca)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-23-2.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-26-2.png)<!-- -->
 
 ``` r
 biplot(fit.pc)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-23-3.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-26-3.png)<!-- -->
 
 <p>
 Overall, these techniques complement each other and can be used together
@@ -1632,26 +1708,26 @@ anova(model)
 plot(model)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-27-1.png)<!-- -->![](Social-Media_files/figure-gfm/unnamed-chunk-27-2.png)<!-- -->![](Social-Media_files/figure-gfm/unnamed-chunk-27-3.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-30-1.png)<!-- -->![](Social-Media_files/figure-gfm/unnamed-chunk-30-2.png)<!-- -->![](Social-Media_files/figure-gfm/unnamed-chunk-30-3.png)<!-- -->
 
     ## Warning in sqrt(crit * p * (1 - hh)/hh): NaNs produced
 
     ## Warning in sqrt(crit * p * (1 - hh)/hh): NaNs produced
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-27-4.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-30-4.png)<!-- -->
 
 ``` r
 avPlots(model)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-27-5.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-30-5.png)<!-- -->
 
 ``` r
 cutoff <- 17/((nrow(social_media)-length(model$coefficients)-2))
 plot(model, which=4, cook.levels=cutoff)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-27-6.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-30-6.png)<!-- -->
 
 ``` r
 influencePlot(model, id.method="identify", main="Influence Plot", sub="Circle size is proportial to Cook's Distance" )
@@ -1674,7 +1750,7 @@ influencePlot(model, id.method="identify", main="Influence Plot", sub="Circle si
     ## Warning in plot.xy(xy.coords(x, y), type = type, ...): "id.method" is not a
     ## graphical parameter
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-27-7.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-30-7.png)<!-- -->
 
     ##       StudRes       Hat      CookD
     ## 8   1.9283209 0.1457607 0.05747738
@@ -1686,7 +1762,7 @@ influencePlot(model, id.method="identify", main="Influence Plot", sub="Circle si
 qqPlot(model, main="QQ Plot")
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-27-8.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-30-8.png)<!-- -->
 
     ## [1]  8 11
 
@@ -1694,7 +1770,7 @@ qqPlot(model, main="QQ Plot")
 ggpairs(data=social_media_numeric, title="Social Media")
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-28-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-31-1.png)<!-- -->
 
 ``` r
 ggplot(social_media_numeric, aes(x = fitted(model), y = residuals(model))) +
@@ -1702,7 +1778,7 @@ ggplot(social_media_numeric, aes(x = fitted(model), y = residuals(model))) +
   labs(title = "Residuals vs Fitted Values", x = "Fitted Values", y = "Residuals")
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-28-2.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-31-2.png)<!-- -->
 <p>
 The residual vs. fitted plot is a tool used to evaluate the assumptions
 and adequacy of a regression model. It helps to identify whether the
@@ -1962,7 +2038,7 @@ residuals(logit_model)
 plot(logit_model)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-34-1.png)<!-- -->![](Social-Media_files/figure-gfm/unnamed-chunk-34-2.png)<!-- -->![](Social-Media_files/figure-gfm/unnamed-chunk-34-3.png)<!-- -->![](Social-Media_files/figure-gfm/unnamed-chunk-34-4.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-37-1.png)<!-- -->![](Social-Media_files/figure-gfm/unnamed-chunk-37-2.png)<!-- -->![](Social-Media_files/figure-gfm/unnamed-chunk-37-3.png)<!-- -->![](Social-Media_files/figure-gfm/unnamed-chunk-37-4.png)<!-- -->
 <p>
 Function calculates the residuals for the fitted logistic regression
 model (logit_model). It returns a vector containing the residuals.
@@ -2122,7 +2198,7 @@ roc(social_media$Trouble_falling_asleep,logit_model2$fitted.values,plot=TRUE)
 
     ## Setting direction: controls < cases
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-35-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-38-1.png)<!-- -->
 
     ## 
     ## Call:
@@ -2149,7 +2225,7 @@ plot(roc_curve, main = "ROC Curve", col = "blue", lwd = 2)
 abline(a = 0, b = 1, lty = 2, col = "red")
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-35-2.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-38-2.png)<!-- -->
 
 ``` r
 auc_value <- auc(roc_curve)
@@ -2167,7 +2243,7 @@ plot(perf, main = "ROC Curve", col = "blue", lwd = 2)
 abline(a = 0, b = 1, lty = 2, col = "red")
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-35-3.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-38-3.png)<!-- -->
 
 ``` r
 # Plot ROC curve
@@ -2190,7 +2266,7 @@ plot.roc(social_media$Trouble_falling_asleep , logit_model2$fitted.values, perce
 legend("bottomright", legend=c("Simple", "Non Simple"), col=c("#377eb8", "#4daf4a"), lwd=4) 
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-35-4.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-38-4.png)<!-- -->
 
 <p>
 The logistic regression model estimates the likelihood of experiencing
@@ -2303,7 +2379,7 @@ print(lda_model)
 plot(lda_model)
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-40-1.png)<!-- -->
+![](Social-Media_files/figure-gfm/unnamed-chunk-43-1.png)<!-- -->
 
 #### Prediction
 
@@ -2442,8 +2518,4 @@ abline(a = 0, b = 1, lty = 2, col = "red")
 text(x = .25, y = .65 ,paste("AUC = ", round(auc.train[[1]],3), sep = ""))
 ```
 
-![](Social-Media_files/figure-gfm/unnamed-chunk-42-1.png)<!-- -->
-
-#### Model Insights
-
-#### Learnings and Takeaways
+![](Social-Media_files/figure-gfm/unnamed-chunk-45-1.png)<!-- -->
